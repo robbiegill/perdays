@@ -1,0 +1,18 @@
+div.jumbotron.masthead
+  div.container-fluid
+    div.row
+      div.span5.offset7
+        div.login-form
+          h1 Log In
+          form(ng-submit='loginPost()')
+            fieldset
+              input.span4(type='text', ng-model='username', placeholder='Username')
+              input.span4(type='password', ng-model='password', placeholder='Password')
+          div.btn(ng-click='loginWithGoogle()') Login With Google
+    div.row
+      div.span3
+      div.span3
+        p one thing
+      div.span3
+        p another thing
+      div.span3

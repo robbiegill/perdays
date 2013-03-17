@@ -1,0 +1,134 @@
+var Task = require('../models/task').Model
+  , TaskEvent = require('../models/taskEvent').Model;
+
+/* 
+ * it should create a task 
+ * POST: /api/task
+ */
+var createTask = function(req, res, next) {
+
+  var taskElements = req.body;
+  var newTask = new Task(taskElements);
+	newTask.save(function(err, task) {
+		if (err) { return next(err); }
+
+		res.json(task);
+	});
+};
+
+/* 
+ * it should return a list of tasks 
+ * GET: /api/task
+ */
+var listTasks = function(req, res, next) {
+
+  Task.find({}, function(err, tasks) {
+    if (err) { return next(err); }
+
+    res.json(tasks);
+  });
+};
+
+/* 
+ * it should get the task with id <- :id 
+ * GET: /api/task/:id
+ */
+var getTask = function(req, res, next) {
+
+  var id = req.params.id;
+  Task.findById(id, function(err, task) {
+    if (err) { return next(err); }
+
+    if (!!task) {
+      return res.json(task);
+    }
+    res.send(404);
+  });
+};
+
+/* 
+ * it should delete task with id <- :id 
+ * DEL: /api/task/:id
+ */
+var deleteTask = function(req, res, next) {
+
+  var id = req.params.id;
+  Task.findById(id, function(err, task) {
+    if (err) { return next(err); }
+
+    if (!!task) {
+      task.remove(function(err) {
+        if (err) { return next(err); }
+      });
+    }
+    res.json({'success': 'true'});
+  });
+};
+
+/* 
+ * it should update task with id <- :id 
+ * PUT: /api/task/:id
+ */
+var updateTask = function(req, res, next) {
+
+  var id = req.params.id;
+  var updates = req.body;
+  Task.findById(id, function(err, task) {
+    if (err) { return next(err); }
+
+    task.set(updates);
+    task.save(function(err, updated) {
+      if (err) { return next(err); }
+
+      res.json({'success': 'true'});
+    });
+  });
+};
+
+/* 
+ * it should add a taskEvent to the task:taskId 
+ * POST: /api/task/:taskId/event
+ * body <- {value: v}
+ */
+var createTaskEvent = function(req, res, next) {
+
+  var taskId = req.params.taskId;
+  var val = req.body.value;
+  Task.findById(taskId, function(err, task) {
+    if (err) { return next(err); }
+
+    task.addEvent(val, function(err, te) {
+      if (err) { return next(err); }
+      res.json(te);
+    });
+  });
+};
+
+/* 
+ * it should delete a taskEvent:id from task:taskId 
+ * DELETE: /api/task/:taskId/event/:id
+ * body <- {value: v}
+ */
+var deleteTaskEvent = function(req, res, next) {
+
+  var taskId = req.params.taskId;
+  var id = req.params.id;
+  Task.findById(taskId, function(err, task) {
+    if (err) { return next(err); }
+
+    task.removeEvent(id, function(err) {
+      if (err) { return next(err); }
+      res.json({'success': 'true'});
+    });
+  });
+};
+
+
+module.exports = {};
+module.exports.createTask = createTask;
+module.exports.listTasks = listTasks;
+module.exports.getTask = getTask;
+module.exports.deleteTask = deleteTask;
+module.exports.updateTask = updateTask;
+module.exports.createTaskEvent = createTaskEvent;
+module.exports.deleteTaskEvent = deleteTaskEvent;
