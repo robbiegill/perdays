@@ -13,7 +13,6 @@ var taskSchema = new Schema({
       value: { type: Number, 'default': 5 }
     , interval: { type: String, 'default': 'day' }
   }
-  , history: [taskEventSchema]
   , notes: String
 });
 
@@ -21,19 +20,13 @@ taskSchema.plugin(ts_created);
 taskSchema.plugin(ts_modified);
 
 taskSchema.methods.addEvent = function(value, cb) {
-  var te = new TaskEvent({
-    value: value
-  });
-  this.history.push(te);
-  this.save(function(err, task) {
-    cb(err, te);
-  });
-};
 
-taskSchema.methods.removeEvent = function(id, cb) {
-  this.history.id(id).remove();
-  this.save(function(err, t) {
-    cb(err);
+  var te = new TaskEvent({
+      task_id: this._id.toString()
+    , value: value
+  });
+  te.save(function(err, created) {
+    cb(err, created);
   });
 };
 

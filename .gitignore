@@ -1,3 +1,6 @@
+#don't check in app secrets...defaults in config.json.example
+config.json
+
 # SublimeText project files
 *.sublime-workspace
 

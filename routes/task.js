@@ -87,7 +87,7 @@ var updateTask = function(req, res, next) {
 
 /* 
  * it should add a taskEvent to the task:taskId 
- * POST: /api/task/:taskId/event
+ * POST: /api/task/:taskId/events
  * body <- {value: v}
  */
 var createTaskEvent = function(req, res, next) {
@@ -105,20 +105,36 @@ var createTaskEvent = function(req, res, next) {
 };
 
 /* 
+ * it should list all taskEvent for task:taskId 
+ * GET: /api/task/:taskId/events
+ */
+var listTaskEvents = function(req, res, next) {
+
+  var taskId = req.params.taskId;
+  TaskEvent.find({task_id: taskId}, function(err, taskEvents) {
+    if (err) {return next(err); }
+
+    res.json(taskEvents);
+  });
+
+};
+
+/* 
  * it should delete a taskEvent:id from task:taskId 
- * DELETE: /api/task/:taskId/event/:id
+ * DELETE: /api/task/:taskId/events/:id
  * body <- {value: v}
  */
 var deleteTaskEvent = function(req, res, next) {
 
   var taskId = req.params.taskId;
   var id = req.params.id;
-  Task.findById(taskId, function(err, task) {
+  TaskEvent.findById(id, function(err, te) {
     if (err) { return next(err); }
 
-    task.removeEvent(id, function(err) {
-      if (err) { return next(err); }
-      res.json({'success': 'true'});
+    te.remove(function(err) {
+      if (err) {return next(err); }
+
+      res.json({"success" : "true"});
     });
   });
 };
@@ -131,4 +147,5 @@ module.exports.getTask = getTask;
 module.exports.deleteTask = deleteTask;
 module.exports.updateTask = updateTask;
 module.exports.createTaskEvent = createTaskEvent;
+module.exports.listTaskEvents = listTaskEvents;
 module.exports.deleteTaskEvent = deleteTaskEvent;

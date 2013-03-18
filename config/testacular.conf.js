@@ -12,15 +12,15 @@ files = [
   JASMINE_ADAPTER,
   'public/lib/angular.js',
   'public/lib/angular-resource.js',
-  'test/lib/angular-mocks.js',
+  'test/client/lib/angular-mocks.js',
   'public/js/**/*.js',
-  'test/**/*.spec.js'
+  'test/client/**/*.spec.js'
 ];
 
 
 // list of files to exclude
 exclude = [
-  
+
 ];
 
 

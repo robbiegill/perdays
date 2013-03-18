@@ -2,7 +2,8 @@
  * Module dependencies.
  */
 
-var express = require('express')
+var config = require('./config.json')
+  , express = require('express')
   , mongoose = require('mongoose')
   , MongoStore = require('connect-mongo')(express)
   , routes = require('./routes')
@@ -18,28 +19,13 @@ var express = require('express')
 var app = express();
 
 
-var mongoCon = 'mongodb://localhost/test';
+var mongoCon = 'mongodb://localhost/' + config.db[config.mode];
 mongoose.connect(mongoCon, function(err) {
   if (err) {throw err;}
-  /*var newTask = new Task({
-      name: 'startup task'
-    , owner: 'robbie'
-    , taskType: 'max'
-    , goal: {
-      value: 5
-    }
-  });
-  var newEvent = new taskEvent({
-    value: 5
-  });
-  newTask.history.push(newEvent);
-
-  newTask.save();*/
-
 });
 
 app.configure(function () {
-  app.set('port', process.env.PORT || 3000);
+  app.set('port', process.env.PORT || config.app.port || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
@@ -49,7 +35,7 @@ app.configure(function () {
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.session({
-      secret: 'hbs',
+      secret: config.app.session_secret || 'perdays',
       maxAge: new Date(Date.now() + 3600000),
       store: new MongoStore({url: mongoCon},function(err) {})
     }
@@ -81,18 +67,17 @@ app.get('/api/task/:id', taskRoutes.getTask);
 app.put('/api/task/:id', taskRoutes.updateTask);
 app.del('/api/task/:id', taskRoutes.deleteTask);
 
-app.get('/api/task/:taskId/event', routeHolder);
-app.post('/api/task/:taskId/event', taskRoutes.createTaskEvent);
+app.get('/api/task/:taskId/events', taskRoutes.listTaskEvents);
+app.post('/api/task/:taskId/events', taskRoutes.createTaskEvent);
 
-app.del('/api/task/:taskId/event/:id', taskRoutes.deleteTaskEvent);
+app.del('/api/task/:taskId/events/:id', taskRoutes.deleteTaskEvent);
 
-/* catch all */
-app.get('*', routes.index);
+/* catch all non-api calls */
+app.get('[^(/api/)]*', routes.index);
 
 
 app.listen(app.get('port'), function () {
   //open('http://localhost:' + app.get('port') + '/');
-  //console.log(app.routes);
 });
 
 module.exports = app;

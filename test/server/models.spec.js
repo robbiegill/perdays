@@ -1,13 +1,17 @@
-describe('models', function() {
-  var mongoose = require('mongoose')
-  , Task = require('../../models/task').Model
-  , TaskEvent = require('../../models/taskEvent').Model;
+describe('models -> ', function() {
+  var config = require('../../config.json')
+    , mongoose = require('mongoose')
+    , Task = require('../../models/task').Model
+    , TaskEvent = require('../../models/taskEvent').Model;
 
   var t;
 
   beforeEach(function() {
     if(!mongoose.connection.db) {
-      mongoose.connect('mongodb://localhost/specs');
+      var con = config.db.host +
+       (config.db.port ? ':' + config.db.port : '') +
+       '/' + config.db['test'];
+      mongoose.connect(con);
     }
   });
 
@@ -19,7 +23,7 @@ describe('models', function() {
 
     beforeEach(function() {
       t = new Task({
-        name: 'test task'
+          name: 'test task'
         , owner: 'test owner'
         , taskType: 'max'
         , goal: { value: 10 }
@@ -75,31 +79,24 @@ describe('models', function() {
       });
     });
 
-    it('should have an empty history', function() {
-      expect(t.history).not.toBeUndefined();
-      expect(t.history.length).toEqual(0);
+    it('should add a taskEvent', function(done) {
+      t.addEvent(23, function(err, te) {
+        expect(err).toBeNull();
+        expect(te.task_id).toBe(t._id.toString());
+        expect(te.value).toBe(23);
+        te.remove();
+        done();
+      });
     });
 
-    it('should add a taskEvent', function() {
-      t.addEvent(51);
-      expect(t.history.length).toEqual(1);
-      expect(t.history[0].value).toEqual(51);
-    });
-
-    it('should remove a taskEvent', function() {
-      t.addEvent(23);
-      expect(t.history.length).toEqual(1);
-      var eventId = t.history[0]._id;
-      t.removeEvent(eventId);
-      expect(t.history.length).toEqual(0);
-    });
   });
 
   describe('taskEvents', function() {
 
     beforeEach(function() {
       t = new TaskEvent({
-        value: 10
+          task_id: '123'
+        , value: 10
       });
     });
 
@@ -107,8 +104,28 @@ describe('models', function() {
      expect(t.value).not.toBeUndefined();
     });
 
+    it('should have a task_id', function() {
+      expect(t.task_id).not.toBeUndefined();
+    });
+
     it('should have a ts_created', function() {
      expect(t.ts_created).not.toBeUndefined();
+    });
+
+    it('should fail save:validation without a task_id', function(done) {
+      t = new TaskEvent({value: 10});
+      t.save(function(err, te) {
+        expect(err.name).toBe('ValidationError');
+        done();
+      });
+    });
+
+    it('should fail save:validation without a value', function(done) {
+      t = new TaskEvent({task_id: 'abc'});
+      t.save(function(err, te) {
+        expect(err.name).toBe('ValidationError');
+        done();
+      });
     });
 
   });
