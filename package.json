@@ -14,7 +14,7 @@
     "underscore": "*",
     "passport": ">= 0.1.15",
     "passport-google": ">= 0.2.0",
-    "testacular": "canary",
+    "karma": "*",
     "jasmine-node": "*",
     "superagent": "*",
     "supertest": "*",
@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "grunt": "~0.4.0",
-    "gruntacular": "~0.2.2",
+    "grunt-karma": "0.3.0",
     "grunt-jasmine-node": "*",
     "grunt-contrib-jshint": "~0.2.0"
   }

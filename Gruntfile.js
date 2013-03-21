@@ -2,9 +2,9 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    testacular: {
+    karma: {
       options: {
-        configFile: 'config/testacular.conf.js'
+        configFile: 'config/karma.conf.js'
       },
       unit: {},
       continuous: {
@@ -18,8 +18,8 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('gruntacular');
+  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-jasmine-node');
 
-  grunt.registerTask('test',['jasmine_node', 'testacular:unit']);
+  grunt.registerTask('test',['jasmine_node', 'karma:unit']);
 };
