@@ -73,7 +73,7 @@ app.post('/api/task/:taskId/events', taskRoutes.createTaskEvent);
 app.del('/api/task/:taskId/events/:id', taskRoutes.deleteTaskEvent);
 
 /* catch all non-api calls */
-app.get('[^(/api/)]*', routes.index);
+app.get(/^(?!\/api\/).*/, routes.index);
 
 
 app.listen(app.get('port'), function () {

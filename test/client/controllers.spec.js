@@ -1,112 +1,101 @@
-'use strict';
+//'use strict';
 
 describe('Controller Tests', function () {
 
-    beforeEach(module('pd'));
+  beforeEach(module('pd'));
 
-    describe('IntlCtrl', function () {
-        /*
-         * http://docs.angularjs.org/api/ngMock.$httpBackend
-         * http://docs.angularjs.org/tutorial/step_05
-         * */
-        var scope, ctrl, $httpBackend;
+  describe('TaskCtrl', function() {
 
-        beforeEach(
-            inject(
-                function (_$httpBackend_, $rootScope, $controller) {
-                    $httpBackend = _$httpBackend_;
-                    $httpBackend.expectGET('/api/c3p0?limit=12&offset=0').
-                        respond([
-                        {hint: 'a', reveal: 'aa'},
-                        {hint: 'a', reveal: 'aa'},
-                        {hint: 'a', reveal: 'aa'},
-                        {hint: 'a', reveal: 'aa'},
-                        {hint: 'a', reveal: 'aa'},
-                        {hint: 'a', reveal: 'aa'},
-                        {hint: 'a', reveal: 'aa'},
-                        {hint: 'a', reveal: 'aa'},
-                        {hint: 'a', reveal: 'aa'},
-                        {hint: 'a', reveal: 'aa'},
-                        {hint: 'a', reveal: 'aa'},
-                        {hint: 'b', reveal: 'bb'}
-                    ]);
-                    scope = $rootScope.$new();
-                    ctrl = $controller('IntlCtrl', {$scope: scope});
-                }
-            )
-        );
+    var scope, ctrl, $httpBackend;
 
-        it('should set the number of cols', function () {
-            expect(scope.cols.length).toEqual(0);
-            $httpBackend.flush();
-            expect(scope.cols.length).toEqual(3);
-        });
-
-        it('should calculate the number of rows', function () {
-            expect(scope.rows.length).toEqual(0);
-            $httpBackend.flush();
-            expect(scope.rows.length).toEqual(4);
-            scope.$apply(scope.cards.length = 30);
-            expect(scope.rows.length).toEqual(10);
-        });
-
-        it('should post a new card', function () {
-            $httpBackend.flush(); // initial GET
-            var howMany = scope.cards.length;
-            $httpBackend.expectPOST('/api/c3p0').respond({hint: '垚', reveal: 'yao'});
-            scope.addCard('垚', 'yao');
-            $httpBackend.flush();
-            expect(scope.cards.length).toBe(howMany + 1);
-        });
-
-        it('should fetch cards by offset and limit', function () {
-            $httpBackend.flush(); // initial GET
-            $httpBackend.expectGET('/api/c3p0?limit=12&offset=12').respond([
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'}
+    beforeEach(
+      inject(
+        function (_$httpBackend_, $rootScope, $controller) {
+          $httpBackend = _$httpBackend_;
+          $httpBackend.expectGET('/api/task').
+            respond([
+              {a:"a"},
+              {a:"a"},
+              {a:"a"}
             ]);
-            scope.busy = false;
-            scope.fetchCards();
-            $httpBackend.flush();
-            expect(scope.offset).toBe(18);
-        });
+            scope = $rootScope.$new();
+            ctrl = $controller('TaskCtrl', {$scope: scope});
+        }
+      )
+    );
 
-        it('should set busy if response length is less than limit', function(){
-            $httpBackend.flush(); // initial GET
-            $httpBackend.expectGET('/api/c3p0?limit=12&offset=12').respond([
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'}
-            ]);
-            scope.busy = false;
-            scope.fetchCards();
-            $httpBackend.flush();
-            expect(scope.busy).toBeFalsy();
-            $httpBackend.expectGET('/api/c3p0?limit=12&offset=24').respond([
-                {hint: 'a', reveal: 'aa'},
-                {hint: 'a', reveal: 'aa'}
-            ]);
-            scope.fetchCards();
-            $httpBackend.flush();
-            expect(scope.busy).toBeTruthy();
-
-        });
-
+    afterEach(function() {
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
     });
 
+    it('should bind the data to tasks', function() {
+      expect(scope.tasks.length).toEqual(0);
+      $httpBackend.flush();
+      expect(scope.tasks.length).toBeGreaterThan(0);
+    });
+
+    it('should create a new task', function() {
+      $httpBackend.flush(); // initial GET
+      var howMany = scope.tasks.length;
+      $httpBackend.expectPOST('/api/task').
+        respond({name: 'task name', owner: 'task owner', notes: 'task notes'});
+      scope.createTask();
+      $httpBackend.flush();
+      expect(scope.tasks.length).toEqual(howMany + 1);
+    });
+
+    it('should reset the data binding when a new task is created', function() {
+      $httpBackend.flush(); // initial GET
+      scope.name = 'name';
+      scope.owner = 'owner';
+      scope.notes = 'notes';
+      $httpBackend.expectPOST('/api/task').
+        respond({name: 'task name', owner: 'task owner', notes: 'task notes'});
+      scope.createTask();
+      $httpBackend.flush();
+      expect(scope.name).toBe('');
+      expect(scope.owner).toBe('');
+      expect(scope.notes).toBe('');
+    });
+
+  });
+
+  describe('TaskCtrl', function() {
+
+    var scope, ctrl, $httpBackend;
+
+    beforeEach(
+      inject(
+        function (_$httpBackend_, $rootScope, $controller) {
+          $httpBackend = _$httpBackend_;
+          $httpBackend.expectGET('/api/task/abc').
+            respond({a:'a'});
+          $httpBackend.expectGET('/api/task/abc/events').
+            respond([{a:'a'}]);
+          routeParams = { id: 'abc' };
+          scope = $rootScope.$new();
+          ctrl = $controller('TaskDetailCtrl', {$scope: scope, $routeParams:routeParams});
+        }
+      )
+    );
+
+    afterEach(function() {
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('should GET the task for the route parameter :id and bind to t', function() {
+      $httpBackend.flush(1);
+      expect(scope.t.a).toBe('a');
+      $httpBackend.flush(1);
+    });
+
+    it('should GET the taskEvents for the route parameter :id and bind to tes', function() {
+      $httpBackend.flush();
+      expect(scope.tes[0].a).toBe('a');
+    });
+
+  });
 
 });
-

@@ -1,0 +1,13 @@
+div.container-fluid
+  div.row-fluid
+    //- include div.span3 userPanel
+    include userPanel
+    div.span9
+      div.row-fluid
+        div.span12.taskBox
+          p Task Detail
+          p name: {{t.name}}
+          p ts_created: {{t.ts_created | date:'medium'}}
+          div.span11.taskBox(ng-repeat='te in tes')
+            p {{te.ts_created | date:'medium'}}
+            p {{te.value}}

@@ -1,5 +1,6 @@
 'use strict';
 
+/* global angular */
 var pdServices = angular.module('pd.services', ['ngResource']);
 
 pdServices.
@@ -18,7 +19,7 @@ pdServices.
 pdServices.
   factory('TaskEvent', function ($resource) {
     return $resource(
-      '/api/task/:taskId/event/:eventId',
-      {taskId:'@taskId', eventId:'@_id'}
+      '/api/task/:taskId/events/:eventId',
+      {taskId:'@task_id', eventId:'@_id'}
     );
   });

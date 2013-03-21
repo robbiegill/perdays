@@ -1,0 +1,23 @@
+div.span3
+      div.taskBox
+        img(ng-src='/img/user.png')
+        h4 Robbie Gill
+        div
+          input.span12(type='text', ng-model='owner', placeholder='owner')
+          input.span12(type='text', ng-model='name', placeholder='name')  
+          input.span12(type='text', ng-model='notes', placeholder='notes')
+          button.btn.span12(ng-click='createTask()') Create 
+        p.muted last vist: yesterday
+        legend
+        p
+          span.badge.badge-success 4
+          span  tasks on target
+        p
+          span.badge.badge-warning 2
+          span  tasks to assess
+        p
+          span.badge.badge-important 1
+          span  task in danger
+        ul.nav.nav-pills
+          li.pull-right
+            a(ng-click='') new tasks

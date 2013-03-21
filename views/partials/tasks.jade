@@ -1,32 +1,22 @@
 div.container-fluid
   div.row-fluid
-    div.span3
-      div.taskBox
-        img(ng-src='img/user.png')
-        h4 Robbie Gill  
-        p.muted last vist: yesterday
-        legend
-        p
-          span.badge.badge-success 4
-          span  tasks on target
-        p
-          span.badge.badge-warning 2
-          span  tasks to assess
-        p
-          span.badge.badge-important 1
-          span  task in danger
-        ul.nav.nav-pills
-          li.pull-right
-            a(ng-click='') new tasks
+    // include div.span3 userPanel
+    include userPanel
     div.span9
       div.row-fluid(ng-repeat='task in tasks')
         div.span12.taskBox
           div
-            h2 {{task.name}}
+            h2 
+              a(ng-href='/tasks/{{task._id}}') {{task.name}}
             p {{task.notes}}
           div.row-fluid
             div.span8
             div.span4
               div.pull-right.btn-toolbar
                 div.btn-group
-                  button.btn(ng-repeat='x in [1,2,4,8,20]') {{x}}
+                  //button.btn(ng-repeat='x in [1,2,4,8,20]') {{x}}
+                  button.btn 1
+                  button.btn 2
+                  button.btn 4
+                  button.btn 8
+                  button.btn 20

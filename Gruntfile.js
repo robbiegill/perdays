@@ -10,6 +10,10 @@ module.exports = function(grunt) {
       continuous: {
         singleRun: true,
         browsers: ['ChromeCanary']
+      },
+      dev: {
+        singleRun: false,
+        autoWatch: true
       }
     },
     jasmine_node: {

@@ -1,5 +1,6 @@
 'use strict';
 
+/* global angular */
 angular.module('pd', [
   'pd.controllers',
   'pd.filters',
@@ -15,6 +16,10 @@ angular.module('pd', [
       when('/tasks', {
         templateUrl: '/partials/tasks',
         controller: 'TaskCtrl'
+      }).
+      when('/tasks/:id', {
+        templateUrl: '/partials/taskDetail',
+        controller: 'TaskDetailCtrl'
       }).
       otherwise({
         redirectTo: '/'
