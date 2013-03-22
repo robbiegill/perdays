@@ -3,6 +3,20 @@
 /* global angular */
 var pdControllers = angular.module('pd.controllers', []);
 
+pdControllers.controller('UserPanelCtrl', [
+  '$scope', function ($scope) {
+    var ctx = document.getElementById("statusCanvas").getContext("2d");
+    var data = [
+          {value:40,color:'#468847'},
+          {value:20,color:'#f89406'},
+          {value:10,color:'#b94a48'}
+        ];
+    /* global Chart */
+    var myNewChart = new Chart(ctx).Doughnut(data);
+
+  }
+]);
+
 pdControllers.controller('TaskCtrl', [
   '$scope',
   '$http',

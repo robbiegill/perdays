@@ -14,11 +14,11 @@ angular.module('pd', [
         controller: 'LoginCtrl'
       }).
       when('/tasks', {
-        templateUrl: '/partials/tasks',
+        templateUrl: '/partials/taskPanel',
         controller: 'TaskCtrl'
       }).
       when('/tasks/:id', {
-        templateUrl: '/partials/taskDetail',
+        templateUrl: '/partials/taskDetailPanel',
         controller: 'TaskDetailCtrl'
       }).
       otherwise({

@@ -1,0 +1,8 @@
+div.row-fluid
+  div.span12.task-box
+    p Task Detail
+    p name: {{t.name}}
+    p ts_created: {{t.ts_created | date:'medium'}}
+    div.span11.task-box(ng-repeat='te in tes')
+      p {{te.ts_created | date:'medium'}}
+      p {{te.value}}

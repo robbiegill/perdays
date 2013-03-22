@@ -1,0 +1,60 @@
+.pd-shadow-box {
+  border: #e7e7e7 1px solid;
+  box-shadow: #eeeeee 0 1px 3px 0;
+}
+.pd-box-padding {
+  padding: 15px 30px 15px 30px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.pd-box {
+  border: #e7e7e7 1px solid;
+  box-shadow: #eeeeee 0 1px 3px 0;
+  padding: 15px 30px 15px 30px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.task-box {
+  border: #e7e7e7 1px solid;
+  box-shadow: #eeeeee 0 1px 3px 0;
+  padding: 15px 30px 15px 30px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+@media (min-width: 768px) {
+  .sb-fixed {
+    position: fixed;
+    left: 0;
+  }
+}
+@media (min-width: 979px) {
+  body {
+    padding: 40px 0 40px 0;
+  }
+}
+@media (min-width: 768px) and (max-width: 979px) {
+  .jumbotron {
+    margin-top: -20px;
+  }
+}
+@media (max-width: 767px) {
+  /* Remove any padding from the body */
+  body {
+    padding-top: 0;
+  }
+  /* Widen masthead and social buttons to fill body padding */
+  .jumbotron {
+    padding: 40px 20px;
+    margin-top: -20px;
+    /* Offset bottom margin on .navbar */
+  
+    margin-right: -20px;
+    margin-left: -20px;
+  }
+}
+@media (max-width: 480px) {
+  position: relative;/* Remove padding above jumbotron */
+  body {
+    padding-top: 0;
+  }
+}

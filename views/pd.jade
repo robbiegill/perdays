@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  div.container-fluid
+    div.row-fluid
+      // include the ng-view
+      div.span3
+      div.span9(ng-view)
+      // include div.span3 userPanel
+      include partials/userPanel

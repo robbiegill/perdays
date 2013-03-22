@@ -4,7 +4,7 @@ div.container-fluid
     include userPanel
     div.span9
       div.row-fluid(ng-repeat='task in tasks')
-        div.span12.taskBox
+        div.span12.task-box
           div
             h2 
               a(ng-href='/tasks/{{task._id}}') {{task.name}}
