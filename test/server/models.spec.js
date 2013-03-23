@@ -6,14 +6,16 @@ describe('models -> ', function() {
 
   var t;
 
-  beforeEach(function() {
-    if(!mongoose.connection.db) {
-      var con = config.db.host +
-       (config.db.port ? ':' + config.db.port : '') +
-       '/' + config.db['test'];
-      mongoose.connect(con);
-    }
-  });
+  if(mongoose.connection.db) {
+    mongoose.disconnect();
+  }
+  var con = config.db.host +
+      (config.db.port ? ':' + config.db.port : '') +
+      '/' + config.db['test'];
+  mongoose.connect(con);
+
+
+  beforeEach(function() {});
 
   afterEach(function() {
     t.remove();
@@ -28,6 +30,7 @@ describe('models -> ', function() {
         , taskType: 'max'
         , goal: { value: 10 }
         , notes: 'test note'
+        , status: 'pass'
       });
     });
 
@@ -85,6 +88,42 @@ describe('models -> ', function() {
         expect(te.task_id).toBe(t._id.toString());
         expect(te.value).toBe(23);
         te.remove();
+        done();
+      });
+    });
+
+    it('should have a status', function() {
+      expect(t.status).toEqual('pass');
+    });
+
+    it('should pass validation with status pass', function(done) {
+      t.status = 'pass';
+      t.save(function(err, t) {
+        expect(err).toBeNull();
+        done();
+      });
+    });
+
+    it('should pass validation with status warn', function(done) {
+      t.status = 'warn';
+      t.save(function(err, t) {
+        expect(err).toBeNull();
+        done();
+      });
+    });
+
+    it('should pass validation with status fail', function(done) {
+      t.status = 'fail';
+      t.save(function(err, t) {
+        expect(err).toBeNull();
+        done();
+      });
+    });
+
+    it('can only have a status of pass, warn, or fail', function(done) {
+      t.status = 'nope';
+      t.save(function(err, t) {
+        expect(err).not.toBeNull();
         done();
       });
     });

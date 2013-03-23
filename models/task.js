@@ -13,6 +13,7 @@ var taskSchema = new Schema({
       value: { type: Number, 'default': 5 }
     , interval: { type: String, 'default': 'day' }
   }
+  , status: { type: String, enum: ['pass', 'warn', 'fail'] }
   , notes: String
 });
 
