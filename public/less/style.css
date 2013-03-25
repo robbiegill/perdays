@@ -1,6 +1,6 @@
 .pd-shadow-box {
   border: #e7e7e7 1px solid;
-  box-shadow: #eeeeee 0 1px 3px 0;
+  box-shadow: #eeeeee 1px 2px 5px 1px;
 }
 .pd-box-padding {
   padding: 15px 30px 15px 30px;
@@ -9,17 +9,26 @@
 }
 .pd-box {
   border: #e7e7e7 1px solid;
-  box-shadow: #eeeeee 0 1px 3px 0;
+  box-shadow: #eeeeee 1px 2px 5px 1px;
   padding: 15px 30px 15px 30px;
   margin-top: 15px;
   margin-bottom: 15px;
 }
 .task-box {
   border: #e7e7e7 1px solid;
-  box-shadow: #eeeeee 0 1px 3px 0;
+  box-shadow: #eeeeee 1px 2px 5px 1px;
   padding: 15px 30px 15px 30px;
   margin-top: 15px;
   margin-bottom: 15px;
+}
+.pd-pass {
+  box-shadow: #468847 1px 2px 5px 1px;
+}
+.pd-warn {
+  box-shadow: #f89406 1px 2px 5px 1px;
+}
+.pd-fail {
+  box-shadow: #b94a48 1px 2px 5px 1px;
 }
 @media (min-width: 768px) {
   .sb-fixed {

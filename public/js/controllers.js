@@ -21,11 +21,23 @@ pdControllers.controller('TaskCtrl', [
   '$scope',
   '$http',
   '$routeParams',
-  'Task', function ($scope, $http, $routeParams, Task) {
+  'Task',
+  'TaskEvent', function ($scope, $http, $routeParams, Task, TaskEvent) {
 
     $scope.tasks = Task.query({}, function (data) {
       console.debug(data);
     });
+
+    $scope.deleteTask = function(t) {
+      t.$remove(function(s) {
+        if (s.success) {
+          var index = $scope.tasks.indexOf(t);
+          if (index > -1) {
+            $scope.tasks.splice(index, 1);
+          }
+        }
+      });
+    };
 
     $scope.createTask = function() {
       var t = new Task({
@@ -38,6 +50,15 @@ pdControllers.controller('TaskCtrl', [
         $scope.owner = '';
         $scope.notes = '';
         $scope.tasks.push(data);
+      });
+    };
+
+    $scope.createTaskEvent = function(t) {
+      var te = new TaskEvent({
+        task_id: t._id,
+        value: '1'
+      }).$save(function(data) {
+        t.status = 'pass';
       });
     };
 

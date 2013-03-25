@@ -22,7 +22,7 @@ var createTask = function(req, res, next) {
  */
 var listTasks = function(req, res, next) {
 
-  Task.find({}, function(err, tasks) {
+  Task.updateStatusThenList(function(err, tasks) {
     if (err) { return next(err); }
 
     res.json(tasks);

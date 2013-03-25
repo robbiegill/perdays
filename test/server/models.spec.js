@@ -2,7 +2,8 @@ describe('models -> ', function() {
   var config = require('../../config.json')
     , mongoose = require('mongoose')
     , Task = require('../../models/task').Model
-    , TaskEvent = require('../../models/taskEvent').Model;
+    , TaskEvent = require('../../models/taskEvent').Model
+    , moment = require('moment');
 
   var t;
 
@@ -30,7 +31,6 @@ describe('models -> ', function() {
         , taskType: 'max'
         , goal: { value: 10 }
         , notes: 'test note'
-        , status: 'pass'
       });
     });
 
@@ -54,7 +54,7 @@ describe('models -> ', function() {
       expect(t.goal.value).toEqual(10);
     });
 
-    it('should have a goal.value', function() {
+    it('should have a default goal.interval', function() {
       expect(t.goal.interval).toBe('day');
     });
 
@@ -92,8 +92,8 @@ describe('models -> ', function() {
       });
     });
 
-    it('should have a status', function() {
-      expect(t.status).toEqual('pass');
+    it('should have a default status', function() {
+      expect(t.status).toEqual('warn');
     });
 
     it('should pass validation with status pass', function(done) {
@@ -126,6 +126,49 @@ describe('models -> ', function() {
         expect(err).not.toBeNull();
         done();
       });
+    });
+
+    describe('addEvent', function() {
+      it('should update status to \'pass\' when adding a task event', function(done) {
+        t.status = 'fail';
+        t.addEvent(10, function(err, te) {
+          expect(t.status).toBe('pass');
+          done();
+        });
+      });
+
+      it('should update last_event when adding a task event', function(done) {
+        var le = t.last_event = new Date();
+        t.addEvent(10, function(err, te) {
+          expect(t.last_event).toBeGreaterThan(le);
+          done();
+        });
+      });
+
+    });
+
+    describe('updateStatus', function() {
+      it('will set status to pass if the \'last_event\' was less than 1 day ago', function() {
+        var now = moment();
+        t.set('last_event', now);
+        t.updateStatus();
+        expect(t.status).toBe('pass');
+      });
+
+      it('will set status to warn if the \'last_event\' was more than 1 day ago', function() {
+        var ago = moment().subtract('days', 1).subtract('seconds', 1);
+        t.set('last_event', ago);
+        t.updateStatus();
+        expect(t.status).toBe('warn');
+      });
+
+      it('will set status to fail if the \'last_event\' was more than 3 day ago', function() {
+        var ago = moment().subtract('days', 3).subtract('seconds', 1);
+        t.set('last_event', ago);
+        t.updateStatus();
+        expect(t.status).toBe('fail');
+      });
+
     });
 
   });

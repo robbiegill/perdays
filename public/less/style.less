@@ -1,6 +1,12 @@
+@fail: rgb(185, 74, 72);
+@warn: rgb(248, 148, 6);
+@pass: rgb(70, 136, 71);
+@shadow-box: 1px 2px 5px 1px;
+
+
 .pd-shadow-box {
   border: rgb(231,231,231) 1px solid;
-  box-shadow: rgb(238,238,238) 0 1px 3px 0;
+  box-shadow: rgb(238,238,238) @shadow-box;
 }
 
 .pd-box-padding {
@@ -16,6 +22,18 @@
 
 .task-box {
   .pd-box;
+}
+
+.pd-pass {
+  box-shadow: @pass @shadow-box;
+}
+
+.pd-warn {
+  box-shadow: @warn @shadow-box;
+}
+
+.pd-fail {
+  box-shadow: @fail @shadow-box;
 }
 
 @media (min-width: 768px) { 

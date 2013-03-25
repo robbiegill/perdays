@@ -1,17 +1,8 @@
-div.row-fluid(ng-repeat='task in tasks')
-  div.span12.task-box
-    div
-      h2 
-        a(ng-href='/tasks/{{task._id}}') {{task.name}}
-      p {{task.notes}}
-    div.row-fluid
-      div.span8
-      div.span4
-        div.pull-right.btn-toolbar
-          div.btn-group
-            //button.btn(ng-repeat='x in [1,2,4,8,20]') {{x}}
-            button.btn 1
-            button.btn 2
-            button.btn 4
-            button.btn 8
-            button.btn 20
+div.row-fluid(ng-repeat='task in tasks | orderBy:\'+status\'')
+  div.span12.task-box(ng-class='\'pd-\'+task.status')
+    button.close(ng-click='deleteTask(task)') &times;
+    h2 
+      a(ng-href='/tasks/{{task._id}}') {{task.name}}
+      small  [{{task.status}}]
+    p 
+      button.btn-link(ng-click='createTaskEvent(task)') I have {{task.notes}}
