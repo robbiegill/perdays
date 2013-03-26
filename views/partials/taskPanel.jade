@@ -3,6 +3,7 @@ div.row-fluid(ng-repeat='task in tasks | orderBy:statusComparator')
     button.close(ng-click='deleteTask(task)') &times;
     h2 
       a(ng-href='/tasks/{{task._id}}') {{task.name}}
-      small  [{{task.status}}]
+      small  passed {{task.last_event | timeFromNow}}
     p 
+      small [{{task.status}}]
       button.btn-link(ng-click='createTaskEvent(task)') I have {{task.notes}}

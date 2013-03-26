@@ -59,6 +59,7 @@ pdControllers.controller('TaskCtrl', [
         value: '1'
       }).$save(function(data) {
         t.status = 'pass';
+        t.last_event = data.ts_created;
       });
     };
 
