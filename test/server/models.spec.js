@@ -148,22 +148,32 @@ describe('models -> ', function() {
     });
 
     describe('updateStatus', function() {
-      it('will set status to pass if the \'last_event\' was less than 1 day ago', function() {
+      it('will set status to pass if the \'last_event\' was less than 1 interval ago', function() {
         var now = moment();
         t.set('last_event', now);
         t.updateStatus();
         expect(t.status).toBe('pass');
       });
 
-      it('will set status to warn if the \'last_event\' was more than 1 day ago', function() {
-        var ago = moment().subtract('days', 1).subtract('seconds', 1);
+      it('will set status to warn if the \'last_event\' was more than 1 interval ago', function() {
+        var intervals = t.get('goal.interval') + 's';
+        var ago = moment().subtract(1, intervals).subtract(1, 'seconds');
         t.set('last_event', ago);
         t.updateStatus();
         expect(t.status).toBe('warn');
       });
 
-      it('will set status to fail if the \'last_event\' was more than 3 day ago', function() {
-        var ago = moment().subtract('days', 3).subtract('seconds', 1);
+      it('will set status to fail if the \'last_event\' was more than 2 intervals ago', function() {
+        var intervals = t.get('goal.interval') + 's';
+        var ago = moment().subtract(2, intervals).subtract(1, 'seconds');
+        t.set('last_event', ago);
+        t.updateStatus();
+        expect(t.status).toBe('fail');
+      });
+
+      it('will use goal.interval', function() {
+        var intervals = t.get('goal.interval') + 's';
+        var ago = moment().subtract(2, intervals).subtract(1, 'seconds');
         t.set('last_event', ago);
         t.updateStatus();
         expect(t.status).toBe('fail');

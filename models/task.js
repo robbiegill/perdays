@@ -11,8 +11,12 @@ var taskSchema = new Schema({
   , owner: { type: String, required: true }
   , taskType: { type: String, 'default': 'max' }
   , goal: {
-      value: { type: Number, 'default': 5 }
-    , interval: { type: String, 'default': 'day' }
+      value: { type: Number, 'default': 1 }
+    , interval: {
+        type: String,
+        'default': 'day',
+        enum: ['year', 'month', 'week', 'day', 'hour', 'minute', 'second']
+      }
   }
   , status: { type: String, 'default': 'warn', enum: ['pass', 'warn', 'fail'] }
   , last_event: { type: Date, 'default': new Date() }
@@ -51,14 +55,15 @@ taskSchema.static('updateStatusThenList', function(cb) {
 });
 
 taskSchema.methods.updateStatus = function() {
-  var aDayAgo = moment().subtract('days', 1);
-  var threeDaysAgo = moment().subtract('days', 3);
+  var intervals = this.get('goal.interval') + 's';
+  var warnThreshold = moment().subtract(1, intervals);
+  var failThreshold = moment().subtract(2, intervals);
   var le = moment(this.get('last_event'));
-  if (le.isBefore(threeDaysAgo)) {
-    //not within 3 days
+  if (le.isBefore(failThreshold)) {
+    //not within 2 intervals, fail
     this.set('status', 'fail');
-  } else if (le.isBefore(aDayAgo)) {
-    //not within a day, warn
+  } else if (le.isBefore(warnThreshold)) {
+    //not within 1 interval, warn
     this.set('status', 'warn');
   } else {
     this.set('status', 'pass');
