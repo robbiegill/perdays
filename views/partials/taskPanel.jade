@@ -1,4 +1,4 @@
-div.row-fluid(ng-repeat='task in tasks | orderBy:\'+status\'')
+div.row-fluid(ng-repeat='task in tasks | orderBy:statusComparator')
   div.span12.task-box(ng-class='\'pd-\'+task.status')
     button.close(ng-click='deleteTask(task)') &times;
     h2 

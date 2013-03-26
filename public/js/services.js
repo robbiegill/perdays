@@ -7,19 +7,19 @@ pdServices.
   value('version', '0.0.1');
 
 pdServices.
-  factory('Card', function($resource){
+  factory('Card', ['$resource', function( $resource) {
     return $resource('/api/c3p0');
-  });
+  }]);
 
 pdServices.
-  factory('Task', function ($resource) {
+  factory('Task', ['$resource', function ($resource) {
     return $resource('/api/task/:taskId', {taskId:'@_id'});
-  });
+  }]);
 
 pdServices.
-  factory('TaskEvent', function ($resource) {
+  factory('TaskEvent', ['$resource', function ($resource) {
     return $resource(
       '/api/task/:taskId/events/:eventId',
       {taskId:'@task_id', eventId:'@_id'}
     );
-  });
+  }]);

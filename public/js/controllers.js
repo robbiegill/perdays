@@ -62,6 +62,20 @@ pdControllers.controller('TaskCtrl', [
       });
     };
 
+    $scope.statusComparator = function(t) {
+      var status = t.status;
+      switch (status) {
+        case 'fail':
+          return 0;
+        case 'warn':
+          return 1;
+        case 'pass':
+          return 2;
+        default:
+          return 10;
+      }
+    };
+
   }
 ]);
 
