@@ -19,7 +19,7 @@ var taskSchema = new Schema({
       }
   }
   , status: { type: String, 'default': 'warn', enum: ['pass', 'warn', 'fail'] }
-  , last_event: { type: Date, 'default': new Date() }
+  , last_event: { type: Date, 'default': Date.now }
   , notes: String
 });
 

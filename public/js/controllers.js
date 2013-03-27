@@ -57,9 +57,9 @@ pdControllers.controller('TaskCtrl', [
       var te = new TaskEvent({
         task_id: t._id,
         value: '1'
-      }).$save(function(data) {
+      }).$save(function(created_te) {
         t.status = 'pass';
-        t.last_event = data.ts_created;
+        t.last_event = created_te.ts_created;
       });
     };
 
