@@ -63,7 +63,7 @@ pdControllers.controller('TaskCtrl', [
       });
     };
 
-    $scope.statusComparator = function(t) {
+    $scope.taskStatusComparator = function(t) {
       var status = t.status;
       switch (status) {
         case 'fail':
@@ -76,6 +76,13 @@ pdControllers.controller('TaskCtrl', [
           return 10;
       }
     };
+
+    $scope.taskTimeComparator = function(t) {
+      /* global moment */
+      return moment(t.last_event).valueOf();
+    };
+
+    $scope.taskOrder = [$scope.taskStatusComparator, $scope.taskTimeComparator];
 
   }
 ]);
