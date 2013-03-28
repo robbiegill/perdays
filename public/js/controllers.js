@@ -104,6 +104,24 @@ pdControllers.controller('TaskDetailCtrl', [
   }
 ]);
 
+pdControllers.controller('NotificationCtrl', [
+  '$scope',
+  'MessageService', function ($scope, MessageService) {
+
+    $scope.messages = MessageService.allMessages;
+
+    $scope.remove = MessageService.remove;
+
+    //TODO: Move to directive
+    $scope.classMap = {
+      error:'alert-error',
+      info:'',
+      success: 'alert-success'
+    };
+
+  }
+]);
+
 pdControllers.controller('LoginCtrl', [
   '$scope',
   '$http',

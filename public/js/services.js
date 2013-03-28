@@ -23,3 +23,36 @@ pdServices.
       {taskId:'@task_id', eventId:'@_id'}
     );
   }]);
+
+pdServices.factory('MessageService', [function () {
+  var messages = [];
+  var service = {};
+  var defaultMsg = {
+    text: '',
+    type: 'info',
+    duration: 10
+  };
+
+  service.add = function(msg, type) {
+    var newMessage = angular.copy(defaultMsg);
+    if (typeof msg !== 'object') {
+      var tmpObj = {};
+      if (msg) tmpObj.text = msg;
+      if (type) tmpObj.type = type;
+      msg = tmpObj;
+    }
+    angular.extend(newMessage, msg);
+    messages.push(newMessage);
+  };
+
+  service.remove = function(msg) {
+    messages.splice(messages.indexOf(msg), 1);
+  };
+
+  service.allMessages = function() {
+    return messages;
+  };
+
+  return service;
+
+}]);

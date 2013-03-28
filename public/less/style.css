@@ -30,6 +30,13 @@
 .pd-fail {
   box-shadow: #b94a48 1px 2px 5px 1px;
 }
+.notification-area {
+  position: fixed;
+  z-index: 9999;
+  top: 8px;
+  right: 8px;
+  width: 300px;
+}
 @media (min-width: 768px) {
   .sb-fixed {
     position: fixed;

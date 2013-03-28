@@ -14,7 +14,6 @@ pdFilters.
 pdFilters.
   filter('timeFromNow', [function() {
     return function(ts) {
-      console.log('ts: ' +  ts);
       /* global moment */
       return moment(ts).fromNow();
     };
