@@ -1,0 +1,4 @@
+div.notification-area(ng-controller='NotificationCtrl')
+  div.alert(ng-repeat='msg in messages()', ng-class='classMap[msg.type]')
+    button.close(ng-click='remove(msg)')&times;
+    {{msg.text}}
