@@ -24,7 +24,6 @@ var listTasks = function(req, res, next) {
 
   Task.updateStatusThenList(function(err, tasks) {
     if (err) { return next(err); }
-
     res.json(tasks);
   });
 };
@@ -134,7 +133,7 @@ var deleteTaskEvent = function(req, res, next) {
     te.remove(function(err) {
       if (err) {return next(err); }
 
-      res.json({"success" : "true"});
+      res.json({'success' : 'true'});
     });
   });
 };
