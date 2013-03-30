@@ -4,7 +4,7 @@ var config = require('../../config.json');
 var buildConnection = function(mode) {
   var dbc;
 
-  if (db) {
+  if (mode) {
     dbc = config.db[mode];
   } else {
     dbc = config.db[config.mode];
