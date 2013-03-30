@@ -5,6 +5,7 @@
 var config = require('./config.json')
   , express = require('express')
   , mongoose = require('mongoose')
+  , mongoUtil = require('./models/util/mongoUtil')
   , MongoStore = require('connect-mongo')(express)
   , routes = require('./routes')
   , partials = require('./routes/partials')
@@ -18,8 +19,7 @@ var config = require('./config.json')
 
 var app = express();
 
-
-var mongoCon = 'mongodb://localhost/' + config.db[config.mode];
+var mongoCon = mongoUtil.buildConnection();
 mongoose.connect(mongoCon, function(err) {
   if (err) {throw err;}
 });

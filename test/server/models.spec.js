@@ -3,16 +3,16 @@ describe('models -> ', function() {
     , mongoose = require('mongoose')
     , Task = require('../../models/task').Model
     , TaskEvent = require('../../models/taskEvent').Model
-    , moment = require('moment');
+    , moment = require('moment')
+    , mongoUtil = require('../../models/util/mongoUtil');
 
   var t;
 
   if(mongoose.connection.db) {
     mongoose.disconnect();
   }
-  var con = config.db.host +
-      (config.db.port ? ':' + config.db.port : '') +
-      '/' + config.db['test'];
+
+  var con = mongoUtil.buildConnection('test');
   mongoose.connect(con);
 
 

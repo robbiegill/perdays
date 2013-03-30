@@ -6,10 +6,26 @@
     "session_secret": "perdays"
   },
   "db": {
-    "prod": "prod",
-    "dev": "dev",
-    "test": "specs",
-    "host": "mongodb://localhost",
-    "port": "" 
+    "prod": {
+      "name": "prod",
+      "host": "localhost",
+      "port": "",
+      "user": "",
+      "pw": ""
+    },
+    "dev": {
+      "name": "perdays",
+      "host": "localhost",
+      "port": "",
+      "user": "",
+      "pw": ""
+    },
+    "test": {
+      "name": "specs",
+      "host": "localhost",
+      "port": "",
+      "user": "",
+      "pw": ""
+    }
   }
 }
