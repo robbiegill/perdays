@@ -3,6 +3,7 @@ div.row-fluid
     p Task Detail
     p name: {{t.name}}
     p ts_created: {{t.ts_created | date:'medium'}}
+    ted
     div.span11.task-box(ng-repeat='te in tes')
       p {{te.ts_created | timeFromNow}}
       p {{te.value}}

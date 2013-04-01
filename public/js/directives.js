@@ -1,5 +1,6 @@
 'use strict';
 
+/* global angular */
 var pdDirectives = angular.module('pd.directives', []);
 
 pdDirectives.
@@ -9,6 +10,10 @@ pdDirectives.
         };
     }]);
 
-pdDirectives.directive('taskEventer', function () {
-  return {};
+pdDirectives.directive('ted', function () {
+  return {
+    restrict: 'E',
+    scope: {},
+    templateUrl: '/directives/taskEventDetail'
+  };
 });

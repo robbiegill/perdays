@@ -9,6 +9,7 @@ var config = require('./config.json')
   , MongoStore = require('connect-mongo')(express)
   , routes = require('./routes')
   , partials = require('./routes/partials')
+  , directives = require('./routes/directives')
   , http = require('http')
   , path = require('path')
   , authMethods = require('./auth-methods')
@@ -58,6 +59,7 @@ app.configure('development', function () {
 
 app.get('/', routes.index);
 app.get('/partials/:name', partials.byName);
+app.get('/directives/:name', directives.byName);
 
 /* api routes */
 app.get('/api/task', taskRoutes.listTasks);
