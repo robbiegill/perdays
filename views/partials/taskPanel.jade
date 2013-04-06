@@ -1,4 +1,4 @@
-div.row-fluid(ng-repeat='task in tasks | orderBy:taskOrder')
+div.row-fluid(ng-repeat='task in tasks | orderBy:taskOrder', ng-animate="{ enter: 'task-enter', leave: 'task-leave' }")
   div.span12.task-box(ng-class='\'pd-\'+task.status')
     button.close(ng-click='deleteTask(task)') &times;
     h2 

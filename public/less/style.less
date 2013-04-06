@@ -36,6 +36,37 @@
   box-shadow: @fail @shadow-box;
 }
 
+.linear-animation-setup {
+  -webkit-transition:all linear 0.3s;
+  -moz-transition:all linear 0.3s;
+  -ms-transition:all linear 0.3s;
+  -o-transition:all linear 0.3s;
+  transition:all linear 0.3s; 
+}
+
+.task-enter-setup,
+.task-leave-setup,
+.task-move-setup {
+  .linear-animation-setup
+}
+
+.task-enter-setup {
+  opacity: 0;
+
+}
+
+.task-enter-setup.task-enter-start {
+  opacity: 1;  
+}
+
+.task-leave-setup {
+  opacity: 1;
+}
+
+.task-leave-setup.task-leave-start {
+  opacity: 0;
+}
+
 .notification-area {
   position: fixed;
   z-index: 9999;
