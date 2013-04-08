@@ -1,5 +1,8 @@
-div.row-fluid(ng-repeat='task in tasks | orderBy:taskOrder', ng-animate="{ enter: 'task-enter', leave: 'task-leave' }")
-  div.span12.task-box(ng-class='\'pd-\'+task.status')
+div.task-outer(
+  ng-repeat='task in tasks | orderBy:taskOrder',
+  ng-class='\'pd-\'+task.status',
+  ng-animate="{ enter: 'task-enter', leave: 'task-leave' }")
+  div.task-inner
     button.close(ng-click='deleteTask(task)') &times;
     h2 
       a(ng-href='/tasks/{{task._id}}') {{task.name}}
