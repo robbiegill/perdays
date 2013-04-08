@@ -1,9 +1,9 @@
 div.row-fluid
-  div.span12.task-box
+  div.span12.pd-box
     p Task Detail
     p name: {{t.name}}
     p ts_created: {{t.ts_created | date:'medium'}}
     ted
-    div.span11.task-box(ng-repeat='te in tes')
+    div.span11.pd-box(ng-repeat='te in tes')
       p {{te.ts_created | timeFromNow}}
       p {{te.value}}

@@ -43,7 +43,7 @@
   box-shadow: @fail @shadow-box;
 }
 
-.linear-animation-setup {
+.cubic-bezier-animation-setup {
   -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
   -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
   -ms-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
@@ -53,9 +53,13 @@
 
 .task-enter-setup,
 .task-leave-setup,
-.task-move-setup {
-  .linear-animation-setup
+.task-move-setup,
+.view-enter-setup {
+  .cubic-bezier-animation-setup
 }
+
+.view-enter-setup {}
+.view-enter-setup.view-enter-start {}
 
 .task-enter-setup {
   opacity: 0;
