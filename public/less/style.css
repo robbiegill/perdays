@@ -43,12 +43,26 @@
 .task-enter-setup,
 .task-leave-setup,
 .task-move-setup,
-.view-enter-setup {
+.view-enter-setup,
+.fade-enter-setup,
+.fade-leave-setup {
   -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   -moz-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   -ms-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   -o-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
+}
+.fade-enter-setup {
+  opacity: 0;
+}
+.fade-enter-start {
+  opacity: 1;
+}
+.fade-leave-setup {
+  opacity: 1;
+}
+.fade-leave-start {
+  opacity: 0;
 }
 .task-enter-setup {
   opacity: 0;

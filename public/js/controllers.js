@@ -87,6 +87,43 @@ pdControllers.controller('TaskCtrl', [
   }
 ]);
 
+pdControllers.controller('CreateTaskCtrl', [
+  '$scope',
+  '$location',
+  'Task',
+  'MessageService', function ($scope, $location, Task, MessageService) {
+
+
+    $scope.createTask = function(redirect) {
+      var name = $scope.taskName;
+      var notes = $scope.taskNotes;
+
+      if ( !name ) {
+        MessageService.add('give it a name');
+        return;
+      } else if (!notes) {
+        MessageService.add('give it an action');
+        return;
+      }
+
+      var t = new Task({
+        name: name,
+        notes: notes,
+        owner: 'username'
+      }).$save({},
+        function(data, status, headers, config) {
+          if (redirect) {
+            $location.path('/tasks');
+          }
+        }, function(data, status, headers, config) {
+          MessageService.add('Something went wrong');
+        }
+      );
+    };
+  }
+]);
+
+
 pdControllers.controller('TaskDetailCtrl', [
   '$scope',
   '$routeParams',

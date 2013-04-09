@@ -21,6 +21,10 @@ angular.module('pd', [
         templateUrl: '/partials/taskDetailPanel',
         controller: 'TaskDetailCtrl'
       }).
+      when('/createTask', {
+        templateUrl: '/partials/createTaskPanel',
+        controller: 'CreateTaskCtrl'
+      }).
       otherwise({
         redirectTo: '/'
       });

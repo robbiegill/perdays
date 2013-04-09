@@ -54,8 +54,24 @@
 .task-enter-setup,
 .task-leave-setup,
 .task-move-setup,
-.view-enter-setup {
+.view-enter-setup,
+.fade-enter-setup,
+.fade-leave-setup  {
   .cubic-bezier-animation-setup
+}
+
+.fade-enter-setup {
+  opacity: 0;
+}
+.fade-enter-start {
+  opacity: 1;
+}
+
+.fade-leave-setup {
+  opacity: 1;
+}
+.fade-leave-start {
+  opacity: 0;
 }
 
 .view-enter-setup {}
