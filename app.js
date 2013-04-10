@@ -16,7 +16,8 @@ var config = require('./config.json')
   , Task = require('./models/task').Model
   , taskEvent = require('./models/taskEvent').Model
   , routeHolder = require('./routes/holder')
-  , taskRoutes = require('./routes/task');
+  , taskRoutes = require('./routes/task')
+  , userRoutes = require('./routes/users');
 
 var app = express();
 
@@ -61,7 +62,12 @@ app.get('/', routes.index);
 app.get('/partials/:name', partials.byName);
 app.get('/directives/:name', directives.byName);
 
+
 /* api routes */
+app.post('/api/register', userRoutes.register);
+app.post('/api/login', userRoutes.login);
+app.post('/api/logout', userRoutes.logout);
+
 app.get('/api/task', taskRoutes.listTasks);
 app.post('/api/task', taskRoutes.createTask);
 

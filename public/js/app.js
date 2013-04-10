@@ -13,6 +13,10 @@ angular.module('pd', [
         templateUrl: '/partials/login',
         controller: 'LoginCtrl'
       }).
+      when('/signup', {
+        templateUrl: '/partials/signup',
+        controller: 'SignUpCtrl'
+      }).
       when('/tasks', {
         templateUrl: '/partials/taskPanel',
         controller: 'TaskCtrl'

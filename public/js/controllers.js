@@ -159,11 +159,14 @@ pdControllers.controller('NotificationCtrl', [
   }
 ]);
 
+pdControllers.controller('SignUpCtrl', ['$scope', function ($scope) {}]);
+
 pdControllers.controller('LoginCtrl', [
   '$scope',
   '$http',
+  '$location',
   '$routeParams',
-  'Card', function ($scope, $http, $routeParams) {
+  'Card', function ($scope, $http, $location, $routeParams) {
 
     /*
     * $scope.username
@@ -171,7 +174,14 @@ pdControllers.controller('LoginCtrl', [
     *
     * */
 
-    $scope.loginPost = function() {    };
+    $scope.login = function() {
+      alert('not yet');
+    };
+
+    $scope.register = function() {
+      $location.path('/signup');
+    };
+
 
     $scope.loginWithGoogle = function () {
       $http.get('/api/auth/google').
