@@ -7,10 +7,15 @@ var mongoose = require('mongoose')
 var userSchema = new Schema({
   username: {type: String, required: true, index: { unique: true }},
   email: {type: String, required: true, unique: true},
-  name: {type: String, required: true},
+  given_name: {type: String, required: true},
+  family_name: {type: String},
   password: {type: String},
   session_key: {type: String, unique: true},
-  auth_type_google: {type: String, unique: true},
+  auth_type_google: {
+    uid: {type: String, unique: true},
+    link: {type: String, unique: true},
+    picture: {type: String}
+  },
   created_at: {type: Date, 'default': Date.now}
 });
 

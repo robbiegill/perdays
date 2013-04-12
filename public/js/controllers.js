@@ -5,14 +5,13 @@ var pdControllers = angular.module('pd.controllers', []);
 
 pdControllers.controller('UserPanelCtrl', [
   '$scope', function ($scope) {
-    var ctx = document.getElementById("statusCanvas").getContext("2d");
+    /*var ctx = document.getElementById("statusCanvas").getContext("2d");
     var data = [
           {value:40,color:'#468847'},
           {value:20,color:'#f89406'},
           {value:10,color:'#b94a48'}
         ];
-    /* global Chart */
-    var myNewChart = new Chart(ctx).Doughnut(data);
+    var myNewChart = new Chart(ctx).Doughnut(data);*/
 
   }
 ]);
@@ -161,12 +160,20 @@ pdControllers.controller('NotificationCtrl', [
 
 pdControllers.controller('SignUpCtrl', ['$scope', function ($scope) {}]);
 
+pdControllers.controller('NavCtrl', ['$scope', function ($scope) {
+
+    $scope.logout = function() {
+      window.location = '/api/user/logout';
+    };
+
+  }
+]);
+
 pdControllers.controller('LoginCtrl', [
   '$scope',
   '$http',
   '$location',
-  '$routeParams',
-  'Card', function ($scope, $http, $location, $routeParams) {
+  '$routeParams', function ($scope, $http, $location, $routeParams) {
 
     /*
     * $scope.username
@@ -178,16 +185,18 @@ pdControllers.controller('LoginCtrl', [
       alert('not yet');
     };
 
+
     $scope.register = function() {
       $location.path('/signup');
     };
 
 
     $scope.loginWithGoogle = function () {
-      $http.get('/api/auth/google').
+      window.location = '/api/auth/google';
+      /*$http.get('/api/auth/google').
         success(function (data, status, headers, config) {
           console.log(data);
-        });
+        });*/
     };
 
   }

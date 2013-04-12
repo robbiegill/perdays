@@ -1,5 +1,5 @@
 var passport = require('passport')
-  , GoogleStrategy = require('passport-google').Strategy
+  , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
   , User = require('./models/user').Model;
 
 passport.serializeUser(function (user, done) {
@@ -32,31 +32,36 @@ passport.deserializeUser(function (obj, done) {
 });
 
 passport.use(new GoogleStrategy({
-    returnURL: 'http://localhost:3000/api/auth/google/return',
-    realm: 'http://localhost:3000/'
+    clientID: '587784565015.apps.googleusercontent.com',
+    clientSecret: 'pfVsSDvobts8zLgnTJ3EyVw_',
+    callbackURL: 'http://localhost:3000/api/auth/google/return'
   },
-  function (identifier, profile, done) {
+  function (token, tokenSecret, profile, done) {
 
-    User.findOne({auth_type_google: identifier}, function(err, user){
+    User.findOne({auth_type_google: profile.id}, function(err, user){
       if (err) {
-        return next(err);
+        return done(err);
       }
-
-      profile.identifier = identifier;
 
       if (user) {
         console.log('do stuff with user');
         return done(null, user);
       } else {
+        console.log(JSON.stringify(profile, null, 2));
         var userObj = {
-          username: profile.identifier,
-          email: profile.emails[0].value,
-          name: profile.name.givenName,
-          auth_type_google: profile.identifier
+          username: profile.id,
+          email: profile._json.email,
+          given_name: profile._json.given_name,
+          family_name: profile._json.family_name,
+          auth_type_google: {
+            uid: profile.id,
+            link: profile._json.link,
+            picture: profile._json.picture
+          }
         };
         var gUser = new User(userObj);
         gUser.save(function(err, user){
-          if (err) {return next(err);}
+          if (err) {return done(err);}
           console.log('return user');
           return done(null, user);
         });
@@ -84,7 +89,8 @@ passport.use(new GoogleStrategy({
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
+  console.log('unauthenticated request');
+  res.redirect('/');
 }
 
 exports.passport = passport;

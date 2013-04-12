@@ -15,6 +15,7 @@
     "moment": "*",
     "passport": ">= 0.1.15",
     "passport-google": ">= 0.2.0",
+    "passport-google-oauth": "*",
     "mongoose": "*",
     "connect-mongo": "*",
     "bcrypt": "*",

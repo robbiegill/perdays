@@ -65,8 +65,21 @@ app.get('/directives/:name', directives.byName);
 
 /* api routes */
 app.post('/api/register', userRoutes.register);
-app.post('/api/login', userRoutes.login);
-app.post('/api/logout', userRoutes.logout);
+app.post('/api/user/login', userRoutes.login);
+app.get('/api/user/logout', userRoutes.logout);
+app.get('/api/auth/google', authMethods.passport.authenticate('google', {
+  scope: [
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email'
+    ]
+  })
+);
+app.get('/api/auth/google/return',
+  authMethods.passport.authenticate('google', { failureRedirect: '/' }),
+  function (req, res) {
+    res.redirect('/tasks');
+  }
+);
 
 app.get('/api/task', taskRoutes.listTasks);
 app.post('/api/task', taskRoutes.createTask);
@@ -81,7 +94,7 @@ app.post('/api/task/:taskId/events', taskRoutes.createTaskEvent);
 app.del('/api/task/:taskId/events/:id', taskRoutes.deleteTaskEvent);
 
 /* catch all non-api calls */
-app.get(/^(?!\/api\/).*/, routes.index);
+app.get(/^(?!\/api\/).*/, authMethods.ensureAuthenticated, routes.index);
 
 
 app.listen(app.get('port'), function () {
