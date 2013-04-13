@@ -1,6 +1,7 @@
 var passport = require('passport')
   , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
-  , User = require('./models/user').Model;
+  , User = require('./models/user').Model
+  , config = ('./config.json');
 
 passport.serializeUser(function (user, done) {
   var createSessionKey = function () {
@@ -32,9 +33,9 @@ passport.deserializeUser(function (obj, done) {
 });
 
 passport.use(new GoogleStrategy({
-    clientID: '587784565015.apps.googleusercontent.com',
-    clientSecret: 'pfVsSDvobts8zLgnTJ3EyVw_',
-    callbackURL: 'http://localhost:3000/api/auth/google/return'
+    clientID: config.authGoogle.ID,
+    clientSecret: config.authGoogle.SECRET,
+    callbackURL: config.authGoogle.callbackURL
   },
   function (token, tokenSecret, profile, done) {
 
