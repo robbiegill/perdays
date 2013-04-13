@@ -1,7 +1,7 @@
 var passport = require('passport')
   , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
   , User = require('./models/user').Model
-  , config = ('./config.json');
+  , config = require('./config.json');
 
 passport.serializeUser(function (user, done) {
   var createSessionKey = function () {

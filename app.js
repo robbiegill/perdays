@@ -69,8 +69,9 @@ app.post('/api/user/login', userRoutes.login);
 app.get('/api/user/logout', userRoutes.logout);
 app.get('/api/auth/google', authMethods.passport.authenticate('google', {
   scope: [
-    'https://www.googleapis.com/auth/userinfo.profile',
-    'https://www.googleapis.com/auth/userinfo.email'
+      'https://www.googleapis.com/auth/userinfo.profile'
+    , 'https://www.googleapis.com/auth/userinfo.email'
+    //, 'https://www.googleapis.com/auth/plus.login'
     ]
   })
 );
