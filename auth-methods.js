@@ -1,5 +1,7 @@
 var passport = require('passport')
   , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
+  , GitHubStrategy = require('passport-github').Strategy
+  , TwitterStrategy = require('passport-twitter').Strategy
   , User = require('./models/user').Model
   , config = require('./config.json');
 
@@ -19,7 +21,7 @@ passport.serializeUser(function (user, done) {
       }
     });
   };
-  if ( user.email ) {
+  if ( user.username ) {
     createSessionKey();
   }
   //done(null, user);
@@ -39,7 +41,7 @@ passport.use(new GoogleStrategy({
   },
   function (token, tokenSecret, profile, done) {
 
-    User.findOne({auth_type_google: profile.id}, function(err, user){
+    User.findOne({ 'auth_type_google.uid': profile.id }, function(err, user){
       if (err) {
         return done(err);
       }
@@ -48,7 +50,7 @@ passport.use(new GoogleStrategy({
         console.log('do stuff with user');
         return done(null, user);
       } else {
-        console.log(JSON.stringify(profile, null, 2));
+
         var userObj = {
           username: profile.id,
           email: profile._json.email,
@@ -63,7 +65,6 @@ passport.use(new GoogleStrategy({
         var gUser = new User(userObj);
         gUser.save(function(err, user){
           if (err) {return done(err);}
-          console.log('return user');
           return done(null, user);
         });
 
@@ -72,19 +73,76 @@ passport.use(new GoogleStrategy({
 
     });
 
+  }
+));
 
-    /*console.log('id: ' + identifier);
-    console.log('profile: ' + profile);
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
+passport.use(new GitHubStrategy({
+    clientID: config.authGitHub.ID,
+    clientSecret: config.authGitHub.SECRET,
+    callbackURL: config.authGitHub.callbackURL
+  },
+  function (accessToken, refreshToken, profile, done) {
+    User.findOne({ 'auth_type_github.uid': profile.id }, function (err, user) {
+      if (err) {return done(err);}
 
-      // To keep the example simple, the user's Google profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Google account with a user record in your database,
-      // and return that user instead.
-      profile.identifier = identifier;
-      return done(null, profile);
-    });*/
+      if (user) {
+        return done(null, user);
+      } else {
+        var userObj = {
+          username: profile.id,
+          email: profile._json.email,
+          given_name: profile.displayName,
+          auth_type_github: {
+            uid: profile.id,
+            username: profile.username,
+            link: profile.profileUrl,
+            picture: profile._json.avatar_url
+          }
+        };
+
+        var githubUser = new User(userObj);
+        githubUser.save(function(err, user) {
+          if (err) {return done(err);}
+          return done(null, user);
+        });
+      }
+
+    });
+  }
+));
+
+passport.use(new TwitterStrategy({
+    consumerKey: config.authTwitter.ID,
+    consumerSecret: config.authTwitter.SECRET,
+    callbackURL: config.authTwitter.callbackURL
+  },
+  function (token, tokenSecret, profile, done) {
+    User.findOne({ 'auth_type_twitter.uid': profile.id }, function (err, user) {
+      if (err) {return done(err);}
+
+      if (user) {
+        return done(null, user);
+      } else {
+        var userObj = {
+          username: profile._json.id,
+          email: '',
+          given_name: profile._json.name,
+          auth_type_twitter: {
+            uid: profile._json.id,
+            username: profile._json.screen_name,
+            link: 'http://twitter.com/' + profile._json.screen_name,
+            picture: profile._json.profile_image_ur
+          }
+        };
+
+        var twitterUser = new User(userObj);
+        twitterUser.save(function(err, user) {
+          if (err) {return done(err);}
+          return done(null, user);
+        });
+      }
+
+    });
   }
 ));
 

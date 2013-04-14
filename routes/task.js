@@ -24,7 +24,7 @@ var listTasks = function(req, res, next) {
 
   Task.updateStatusThenList(function(err, tasks) {
     if (err) { return next(err); }
-    console.log(JSON.stringify(req.user, null, 2));
+    //console.log(JSON.stringify(req.user, null, 2));
     res.json(tasks);
   });
 };

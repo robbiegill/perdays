@@ -6,13 +6,25 @@ var mongoose = require('mongoose')
 
 var userSchema = new Schema({
   username: {type: String, required: true, index: { unique: true }},
-  email: {type: String, required: true, unique: true},
+  email: {type: String},
   given_name: {type: String, required: true},
   family_name: {type: String},
   password: {type: String},
   session_key: {type: String, unique: true},
   auth_type_google: {
     uid: {type: String, unique: true},
+    link: {type: String, unique: true},
+    picture: {type: String}
+  },
+  auth_type_github: {
+    uid: {type: String, unique: true},
+    username: {type: String, unique: true},
+    link: {type: String, unique: true},
+    picture: {type: String}
+  },
+  auth_type_twitter: {
+    uid: {type: String, unique: true},
+    username: {type: String, unique: true},
     link: {type: String, unique: true},
     picture: {type: String}
   },

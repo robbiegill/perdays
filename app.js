@@ -67,13 +67,14 @@ app.get('/directives/:name', directives.byName);
 app.post('/api/register', userRoutes.register);
 app.post('/api/user/login', userRoutes.login);
 app.get('/api/user/logout', userRoutes.logout);
-app.get('/api/auth/google', authMethods.passport.authenticate('google', {
-  scope: [
-      'https://www.googleapis.com/auth/userinfo.profile'
-    , 'https://www.googleapis.com/auth/userinfo.email'
-    //, 'https://www.googleapis.com/auth/plus.login'
-    ]
-  })
+app.get('/api/auth/google',
+  authMethods.passport.authenticate('google', {
+    scope: [
+        'https://www.googleapis.com/auth/userinfo.profile'
+      , 'https://www.googleapis.com/auth/userinfo.email'
+      //, 'https://www.googleapis.com/auth/plus.login'
+      ]
+    })
 );
 app.get('/api/auth/google/return',
   authMethods.passport.authenticate('google', { failureRedirect: '/' }),
@@ -81,6 +82,27 @@ app.get('/api/auth/google/return',
     res.redirect('/tasks');
   }
 );
+app.get('/api/auth/github',
+  authMethods.passport.authenticate('github', {
+    scope: ['user:email']
+  })
+);
+app.get('/api/auth/github/callback',
+  authMethods.passport.authenticate('github', { failureRedirect: '/'}),
+  function (req, res) {
+    res.redirect('/tasks');
+  }
+);
+app.get('/api/auth/twitter',
+  authMethods.passport.authenticate('twitter')
+);
+app.get('/api/auth/twitter/callback',
+  authMethods.passport.authenticate('twitter', { failureRedirect: '/'}),
+  function (req, res) {
+    res.redirect('/tasks');
+  }
+);
+
 
 app.get('/api/task', taskRoutes.listTasks);
 app.post('/api/task', taskRoutes.createTask);

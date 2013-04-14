@@ -190,6 +190,13 @@ pdControllers.controller('LoginCtrl', [
       $location.path('/signup');
     };
 
+    $scope.loginWithGitHub = function () {
+      window.location = '/api/auth/github';
+    };
+
+    $scope.loginWithTwitter = function () {
+      window.location = '/api/auth/twitter';
+    };
 
     $scope.loginWithGoogle = function () {
       window.location = '/api/auth/google';

@@ -1,0 +1,12 @@
+div
+  div.row-fluid
+    div.span6.pd-box
+      form.form-horizontal
+        legend Create a New Task
+        fieldset
+          p
+            input.span12(type='text', ng-model='taskName', placeholder='Task Name')
+          p
+            input.span12(type='text', ng-model='taskNotes', placeholder='I have...')
+          p
+            button.btn.btn-primary.pull-right(type='button', ng-click='createTask(true)') Create
