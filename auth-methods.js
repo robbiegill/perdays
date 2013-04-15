@@ -5,6 +5,8 @@ var passport = require('passport')
   , User = require('./models/user').Model
   , config = require('./config.json');
 
+module.exports = {};
+
 passport.serializeUser(function (user, done) {
   var createSessionKey = function () {
     var token = user.createToken();
@@ -52,7 +54,7 @@ passport.use(new GoogleStrategy({
       } else {
 
         var userObj = {
-          username: profile.id,
+          username: '_google_' + profile.id,
           email: profile._json.email,
           given_name: profile._json.given_name,
           family_name: profile._json.family_name,
@@ -89,7 +91,7 @@ passport.use(new GitHubStrategy({
         return done(null, user);
       } else {
         var userObj = {
-          username: profile.id,
+          username: '_github_' + profile.id,
           email: profile._json.email,
           given_name: profile.displayName,
           auth_type_github: {
@@ -124,7 +126,7 @@ passport.use(new TwitterStrategy({
         return done(null, user);
       } else {
         var userObj = {
-          username: profile._json.id,
+          username: '_twitter_' + profile._json.id,
           email: '',
           given_name: profile._json.name,
           auth_type_twitter: {
@@ -148,9 +150,30 @@ passport.use(new TwitterStrategy({
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  console.log('unauthenticated request');
   res.redirect('/');
 }
 
-exports.passport = passport;
-exports.ensureAuthenticated = ensureAuthenticated;
+function apiAuthentication(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  return res.json(401, { 'err': 'Authentication failed. Please log in.'});
+}
+
+module.exports.googleAuth = passport.authenticate('google', {
+    scope: [
+        'https://www.googleapis.com/auth/userinfo.profile'
+      , 'https://www.googleapis.com/auth/userinfo.email'
+      /*, 'https://www.googleapis.com/auth/plus.login'*/]
+    });
+module.exports.googleCallback = passport.authenticate('google', { failureRedirect: '/' });
+
+module.exports.githubAuth = passport.authenticate('github', { scope: ['user:email'] });
+module.exports.githubCallback = passport.authenticate('github', { failureRedirect: '/'});
+
+module.exports.twitterAuth = passport.authenticate('twitter');
+module.exports.twitterCallback = passport.authenticate('twitter', { failureRedirect: '/'});
+
+
+
+module.exports.passport = passport;
+module.exports.ensureAuthenticated = ensureAuthenticated;
+module.exports.apiAuthentication = apiAuthentication;

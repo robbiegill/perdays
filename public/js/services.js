@@ -37,6 +37,14 @@ pdServices.factory('MessageService', [function () {
     messages.push(newMessage);
   };
 
+  service.success = function(msg) {
+    service.add(msg, 'success');
+  };
+
+  service.error = function(msg) {
+    service.add(msg, 'error');
+  };
+
   service.remove = function(msg) {
     messages.splice(messages.indexOf(msg), 1);
   };
@@ -46,5 +54,27 @@ pdServices.factory('MessageService', [function () {
   };
 
   return service;
+
+}]);
+
+pdServices.config(['$httpProvider', function ($httpProvider) {
+  var interceptor = function ($q, MessageService) {
+    function success(response) {
+      return response;
+    }
+
+    function error(response) {
+      if (response.data.err) {
+        MessageService.error(response.data.err);
+      }
+      return $q.reject(response);
+    }
+
+    return function(promise) {
+      return promise.then(success, error);
+    };
+  };
+
+  $httpProvider.responseInterceptors.push(interceptor);
 
 }]);

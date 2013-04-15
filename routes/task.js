@@ -12,7 +12,7 @@ var createTask = function(req, res, next) {
 	newTask.save(function(err, task) {
 		if (err) { return next(err); }
 
-		res.json(task);
+		res.json(201, task);
 	});
 };
 

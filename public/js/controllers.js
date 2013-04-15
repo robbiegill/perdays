@@ -20,12 +20,15 @@ pdControllers.controller('TaskCtrl', [
   '$scope',
   '$http',
   '$routeParams',
+  '$location',
   'Task',
-  'TaskEvent', function ($scope, $http, $routeParams, Task, TaskEvent) {
+  'TaskEvent', function ($scope, $http, $routeParams, $location, Task, TaskEvent) {
 
-    $scope.tasks = Task.query({}, function (data) {
-      console.debug(data);
-    });
+    $scope.tasks = Task.query({},
+      function(t, getResponseHeaders) {},
+      function(res) {
+        $location.path('/');
+      });
 
     $scope.deleteTask = function(t) {
       t.$remove(function(s) {
@@ -115,7 +118,7 @@ pdControllers.controller('CreateTaskCtrl', [
             $location.path('/tasks');
           }
         }, function(data, status, headers, config) {
-          MessageService.add('Something went wrong');
+          // msg from interceptor
         }
       );
     };
@@ -173,7 +176,8 @@ pdControllers.controller('LoginCtrl', [
   '$scope',
   '$http',
   '$location',
-  '$routeParams', function ($scope, $http, $location, $routeParams) {
+  '$routeParams',
+  '$window', function ($scope, $http, $location, $routeParams, $window) {
 
     /*
     * $scope.username
@@ -182,7 +186,7 @@ pdControllers.controller('LoginCtrl', [
     * */
 
     $scope.login = function() {
-      alert('not yet');
+      $window.alert('not yet');
     };
 
 
@@ -191,19 +195,15 @@ pdControllers.controller('LoginCtrl', [
     };
 
     $scope.loginWithGitHub = function () {
-      window.location = '/api/auth/github';
+      $window.location = '/api/auth/github';
     };
 
     $scope.loginWithTwitter = function () {
-      window.location = '/api/auth/twitter';
+      $window.location = '/api/auth/twitter';
     };
 
     $scope.loginWithGoogle = function () {
-      window.location = '/api/auth/google';
-      /*$http.get('/api/auth/google').
-        success(function (data, status, headers, config) {
-          console.log(data);
-        });*/
+      $window.location = '/api/auth/google';
     };
 
   }

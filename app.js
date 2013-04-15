@@ -17,7 +17,8 @@ var config = require('./config.json')
   , taskEvent = require('./models/taskEvent').Model
   , routeHolder = require('./routes/holder')
   , taskRoutes = require('./routes/task')
-  , userRoutes = require('./routes/users');
+  , userRoutes = require('./routes/users')
+  , redirectTo = require('./routes/redirectTo');
 
 var app = express();
 
@@ -49,7 +50,7 @@ app.configure(function () {
   app.use(function(err, req, res, next) {
     //error handling middleware has sig.length 4
     console.error('ERROR: ' + err);
-    res.send(500);
+    res.send(500, { err: 'something blew up' });
   });
 
 });
@@ -64,60 +65,37 @@ app.get('/directives/:name', directives.byName);
 
 
 /* api routes */
+
 app.post('/api/register', userRoutes.register);
 app.post('/api/user/login', userRoutes.login);
 app.get('/api/user/logout', userRoutes.logout);
-app.get('/api/auth/google',
-  authMethods.passport.authenticate('google', {
-    scope: [
-        'https://www.googleapis.com/auth/userinfo.profile'
-      , 'https://www.googleapis.com/auth/userinfo.email'
-      //, 'https://www.googleapis.com/auth/plus.login'
-      ]
-    })
+app.get('/api/auth/google', authMethods.googleAuth);
+app.get('/api/auth/google/return', authMethods.googleCallback,
+  redirectTo('/tasks')
 );
-app.get('/api/auth/google/return',
-  authMethods.passport.authenticate('google', { failureRedirect: '/' }),
-  function (req, res) {
-    res.redirect('/tasks');
-  }
+app.get('/api/auth/github', authMethods.githubAuth );
+app.get('/api/auth/github/callback', authMethods.githubCallback,
+  redirectTo('/tasks')
 );
-app.get('/api/auth/github',
-  authMethods.passport.authenticate('github', {
-    scope: ['user:email']
-  })
-);
-app.get('/api/auth/github/callback',
-  authMethods.passport.authenticate('github', { failureRedirect: '/'}),
-  function (req, res) {
-    res.redirect('/tasks');
-  }
-);
-app.get('/api/auth/twitter',
-  authMethods.passport.authenticate('twitter')
-);
-app.get('/api/auth/twitter/callback',
-  authMethods.passport.authenticate('twitter', { failureRedirect: '/'}),
-  function (req, res) {
-    res.redirect('/tasks');
-  }
+app.get('/api/auth/twitter', authMethods.twitterAuth);
+app.get('/api/auth/twitter/callback', authMethods.twitterCallback,
+  redirectTo('/tasks')
 );
 
-
+/* start authentication required api calls */
+app.all('/api/*', authMethods.apiAuthentication);
 app.get('/api/task', taskRoutes.listTasks);
 app.post('/api/task', taskRoutes.createTask);
-
 app.get('/api/task/:id', taskRoutes.getTask);
 app.put('/api/task/:id', taskRoutes.updateTask);
 app.del('/api/task/:id', taskRoutes.deleteTask);
-
 app.get('/api/task/:taskId/events', taskRoutes.listTaskEvents);
 app.post('/api/task/:taskId/events', taskRoutes.createTaskEvent);
-
 app.del('/api/task/:taskId/events/:id', taskRoutes.deleteTaskEvent);
+/* end authentication required api calls */
 
 /* catch all non-api calls */
-app.get(/^(?!\/api\/).*/, authMethods.ensureAuthenticated, routes.index);
+app.get(/^(?!\/api\/).*/, routes.index);
 
 
 app.listen(app.get('port'), function () {
