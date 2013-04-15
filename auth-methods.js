@@ -52,16 +52,18 @@ passport.use(new GoogleStrategy({
         console.log('do stuff with user');
         return done(null, user);
       } else {
-
+        var j = profile._json;
         var userObj = {
-          username: '_google_' + profile.id,
-          email: profile._json.email,
-          given_name: profile._json.given_name,
-          family_name: profile._json.family_name,
+          provider: 'google',
+          username: '_google_' + j.id,
+          email: j.email,
+          display_name: j.given_name,
+          family_name: j.family_name,
           auth_type_google: {
-            uid: profile.id,
-            link: profile._json.link,
-            picture: profile._json.picture
+            uid: j.id,
+            username: j.email,
+            link: j.link,
+            picture: j.picture
           }
         };
         var gUser = new User(userObj);
@@ -90,15 +92,17 @@ passport.use(new GitHubStrategy({
       if (user) {
         return done(null, user);
       } else {
+        var j = profile._json;
         var userObj = {
-          username: '_github_' + profile.id,
-          email: profile._json.email,
-          given_name: profile.displayName,
+          provider: 'github',
+          username: '_github_' + j.id,
+          email: j.email,
+          display_name: j.name,
           auth_type_github: {
-            uid: profile.id,
-            username: profile.username,
-            link: profile.profileUrl,
-            picture: profile._json.avatar_url
+            uid: j.id,
+            username: j.login,
+            link: j.html_url,
+            picture: j.avatar_url
           }
         };
 
@@ -125,15 +129,18 @@ passport.use(new TwitterStrategy({
       if (user) {
         return done(null, user);
       } else {
+        var j = profile._json;
+        console.log(JSON.stringify(j, null, 2));
         var userObj = {
-          username: '_twitter_' + profile._json.id,
-          email: '',
-          given_name: profile._json.name,
+          provider: 'twitter',
+          username: '_twitter_' + j.id_str,
+          email: null,
+          display_name: j.name,
           auth_type_twitter: {
-            uid: profile._json.id,
-            username: profile._json.screen_name,
-            link: 'http://twitter.com/' + profile._json.screen_name,
-            picture: profile._json.profile_image_ur
+            uid: j.id_str,
+            username: j.screen_name,
+            link: 'http://twitter.com/' + j.screen_name,
+            picture: j.profile_image_url
           }
         };
 
