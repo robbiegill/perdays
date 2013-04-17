@@ -7,13 +7,16 @@ var Task = require('../models/task').Model
  */
 var createTask = function(req, res, next) {
 
-  var taskElements = req.body;
-  var newTask = new Task(taskElements);
-	newTask.save(function(err, task) {
-		if (err) { return next(err); }
+  var owner = req.user.username;
+  var name = req.body.name;
+  var notes = req.body.notes;
+  Task.createOne(owner, name, notes, 
+    function(err, task) {
+      if (err) { return next(err); }
 
-		res.json(201, task);
-	});
+      res.json(201, task);
+    }
+  );
 };
 
 /* 
@@ -22,7 +25,8 @@ var createTask = function(req, res, next) {
  */
 var listTasks = function(req, res, next) {
 
-  Task.updateStatusThenList(function(err, tasks) {
+  var username = req.user.username;
+  Task.updateStatusThenList(username, function(err, tasks) {
     if (err) { return next(err); }
     //console.log(JSON.stringify(req.user, null, 2));
     res.json(tasks);
@@ -35,8 +39,9 @@ var listTasks = function(req, res, next) {
  */
 var getTask = function(req, res, next) {
 
-  var id = req.params.id;
-  Task.findById(id, function(err, task) {
+  var taskId = req.params.id;
+  var username = req.user.username;
+  Task.findOne({ owner: username, _id: taskId }, function(err, task) {
     if (err) { return next(err); }
 
     if (!!task) {
@@ -52,8 +57,9 @@ var getTask = function(req, res, next) {
  */
 var deleteTask = function(req, res, next) {
 
-  var id = req.params.id;
-  Task.findById(id, function(err, task) {
+  var taskId = req.params.id;
+  var username = req.user.username;
+  Task.findOne({ owner: username, _id: taskId }, function(err, task) {
     if (err) { return next(err); }
 
     if (!!task) {

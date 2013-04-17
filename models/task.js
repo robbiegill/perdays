@@ -44,8 +44,18 @@ taskSchema.methods.addEvent = function(value, cb) {
   });
 };
 
-taskSchema.static('updateStatusThenList', function(cb) {
-  this.find({}, function(err, tasks) {
+taskSchema.static('createOne', function(_username, _name, _notes, cb) {
+  var task = new this({
+    owner: _username,
+    name: _name,
+    notes: _notes
+  }).save(function(err, task){
+    cb(err, task);
+  });
+});
+
+taskSchema.static('updateStatusThenList', function(_username, cb) {
+  this.find({owner: _username}, function(err, tasks) {
     if (err) { return cb(err, tasks); }
     tasks.forEach(function(t) {
       t.updateStatus();
