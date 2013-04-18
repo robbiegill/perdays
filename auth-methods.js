@@ -39,7 +39,7 @@ passport.deserializeUser(function (obj, done) {
 passport.use(new GoogleStrategy({
     clientID: config.authGoogle.ID,
     clientSecret: config.authGoogle.SECRET,
-    callbackURL: config.authGoogle.callbackURL
+    callbackURL: getCallbackURLWithProtocol(config.authGoogle.callbackURL)
   },
   function (token, tokenSecret, profile, done) {
 
@@ -83,7 +83,7 @@ passport.use(new GoogleStrategy({
 passport.use(new GitHubStrategy({
     clientID: config.authGitHub.ID,
     clientSecret: config.authGitHub.SECRET,
-    callbackURL: config.authGitHub.callbackURL
+    callbackURL: getCallbackURLWithProtocol(config.authGitHub.callbackURL)
   },
   function (accessToken, refreshToken, profile, done) {
     User.findOne({ 'auth_type_github.uid': profile.id }, function (err, user) {
@@ -120,7 +120,7 @@ passport.use(new GitHubStrategy({
 passport.use(new TwitterStrategy({
     consumerKey: config.authTwitter.ID,
     consumerSecret: config.authTwitter.SECRET,
-    callbackURL: config.authTwitter.callbackURL
+    callbackURL: getCallbackURLWithProtocol(config.authTwitter.callbackURL)
   },
   function (token, tokenSecret, profile, done) {
     User.findOne({ 'auth_type_twitter.uid': profile.id }, function (err, user) {
@@ -154,6 +154,10 @@ passport.use(new TwitterStrategy({
     });
   }
 ));
+
+function getCallbackURLWithProtocol(url) {
+  return (config.useHTTPS ? 'https://' : 'http://') + url;
+}
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }

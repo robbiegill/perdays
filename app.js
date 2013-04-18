@@ -11,6 +11,8 @@ var config = require('./config.json')
   , partials = require('./routes/partials')
   , directives = require('./routes/directives')
   , http = require('http')
+  , https = require('https')
+  , fs = require('fs')
   , path = require('path')
   , authMethods = require('./auth-methods')
   , Task = require('./models/task').Model
@@ -98,8 +100,14 @@ app.del('/api/task/:taskId/events/:id', taskRoutes.deleteTaskEvent);
 app.get(/^(?!\/api\/).*/, routes.index);
 
 
-app.listen(app.get('port'), function () {
-  //open('http://localhost:' + app.get('port') + '/');
-});
+if (config.useHTTPS) {
+  var httpsOptions = {
+    key: fs.readFileSync('config/key.pem'),
+    cert: fs.readFileSync('config/cert.pem')
+  };
+  https.createServer(httpsOptions, app).listen(app.set('port'));
+} else {
+  http.createServer(app).listen(app.set('port'));
+}
 
 module.exports = app;
