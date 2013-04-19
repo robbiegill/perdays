@@ -53,20 +53,8 @@ passport.use(new GoogleStrategy({
         return done(null, user);
       } else {
         var j = profile._json;
-        var userObj = {
-          provider: 'google',
-          username: '_google_' + j.id,
-          email: j.email,
-          display_name: j.given_name,
-          family_name: j.family_name,
-          auth_type_google: {
-            uid: j.id,
-            username: j.email,
-            link: j.link,
-            picture: j.picture
-          }
-        };
-        var gUser = new User(userObj);
+        var gUser = new User();
+        gUser.setGoogleAttr(j);
         gUser.save(function(err, user){
           if (err) {return done(err);}
           return done(null, user);
@@ -86,6 +74,7 @@ passport.use(new GitHubStrategy({
     callbackURL: getCallbackURLWithProtocol(config.authGitHub.callbackURL)
   },
   function (accessToken, refreshToken, profile, done) {
+
     User.findOne({ 'auth_type_github.uid': profile.id }, function (err, user) {
       if (err) {return done(err);}
 
@@ -93,20 +82,8 @@ passport.use(new GitHubStrategy({
         return done(null, user);
       } else {
         var j = profile._json;
-        var userObj = {
-          provider: 'github',
-          username: '_github_' + j.id,
-          email: j.email,
-          display_name: j.name,
-          auth_type_github: {
-            uid: j.id,
-            username: j.login,
-            link: j.html_url,
-            picture: j.avatar_url
-          }
-        };
-
-        var githubUser = new User(userObj);
+        var githubUser = new User();
+        githubUser.setGitHubAttr(j);
         githubUser.save(function(err, user) {
           if (err) {return done(err);}
           return done(null, user);
@@ -123,6 +100,7 @@ passport.use(new TwitterStrategy({
     callbackURL: getCallbackURLWithProtocol(config.authTwitter.callbackURL)
   },
   function (token, tokenSecret, profile, done) {
+
     User.findOne({ 'auth_type_twitter.uid': profile.id }, function (err, user) {
       if (err) {return done(err);}
 
@@ -130,21 +108,8 @@ passport.use(new TwitterStrategy({
         return done(null, user);
       } else {
         var j = profile._json;
-        console.log(JSON.stringify(j, null, 2));
-        var userObj = {
-          provider: 'twitter',
-          username: '_twitter_' + j.id_str,
-          email: null,
-          display_name: j.name,
-          auth_type_twitter: {
-            uid: j.id_str,
-            username: j.screen_name,
-            link: 'http://twitter.com/' + j.screen_name,
-            picture: j.profile_image_url
-          }
-        };
-
-        var twitterUser = new User(userObj);
+        var twitterUser = new User();
+        twitterUser.setTwitterAttr(j);
         twitterUser.save(function(err, user) {
           if (err) {return done(err);}
           return done(null, user);

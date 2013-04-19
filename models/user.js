@@ -2,36 +2,24 @@ var mongoose = require('mongoose')
   , Schema = mongoose.Schema
   , bcrypt = require('bcrypt')
   , SALT_WORK_FACTOR = 10
-  , uuid = require('node-uuid');
+  , uuid = require('node-uuid')
+  , twitter_plugin = require('./plugins/twitter-oauth1a-user')
+  , github_plugin = require('./plugins/github-oauth2-user')
+  , google_plugin = require('./plugins/google-oauth2-user');
 
 var userSchema = new Schema({
   username: {type: String, required: true, index: { unique: true }},
   email: {type: String},
   display_name: {type: String, required: true},
-  family_name: {type: String},
   provider: {type: String},
-  auth_type_google: {
-    uid: {type: String},
-    username: {type: String},
-    link: {type: String},
-    picture: {type: String}
-  },
-  auth_type_github: {
-    uid: {type: String},
-    username: {type: String},
-    link: {type: String},
-    picture: {type: String}
-  },
-  auth_type_twitter: {
-    uid: {type: String},
-    username: {type: String},
-    link: {type: String},
-    picture: {type: String}
-  },
   password: {type: String},
   session_key: {type: String, unique: true},
   created_at: {type: Date, 'default': Date.now}
 });
+
+userSchema.plugin(twitter_plugin);
+userSchema.plugin(github_plugin);
+userSchema.plugin(google_plugin);
 
 userSchema.pre('save', function(next) {
   var user = this;
@@ -84,7 +72,6 @@ userSchema.statics.getAuthenticated = function(username, password, cb) {
         return cb(null, null, codes.PASSWORD_FAILURE);
       }
     });
-
 
   });
 };
