@@ -1,6 +1,6 @@
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
-  , ts_created = require('./plugins/ts_created');
+  , ts_created = require('goose-plugins').ts_created;
 
 var taskEventSchema = new Schema({
     task_id: { type: String, required: true }
@@ -10,7 +10,6 @@ var taskEventSchema = new Schema({
 taskEventSchema.plugin(ts_created);
 
 taskEventSchema.statics.removeEvent = function(id, cb) {
-
   this.remove({_id: id}, function(err) {
     if (err) { return next(err); }
 

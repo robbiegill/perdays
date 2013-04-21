@@ -7,10 +7,10 @@ var Task = require('../models/task').Model
  */
 var createTask = function(req, res, next) {
 
-  var owner = req.user.username;
+  var owner = req.user.uid;
   var name = req.body.name;
   var notes = req.body.notes;
-  Task.createOne(owner, name, notes, 
+  Task.createOne(owner, name, notes,
     function(err, task) {
       if (err) { return next(err); }
 
@@ -25,8 +25,8 @@ var createTask = function(req, res, next) {
  */
 var listTasks = function(req, res, next) {
 
-  var username = req.user.username;
-  Task.updateStatusThenList(username, function(err, tasks) {
+  var uid = req.user.uid;
+  Task.updateStatusThenList(uid, function(err, tasks) {
     if (err) { return next(err); }
     //console.log(JSON.stringify(req.user, null, 2));
     res.json(tasks);
@@ -40,8 +40,8 @@ var listTasks = function(req, res, next) {
 var getTask = function(req, res, next) {
 
   var taskId = req.params.id;
-  var username = req.user.username;
-  Task.findOne({ owner: username, _id: taskId }, function(err, task) {
+  var uid = req.user.uid;
+  Task.findOne({ owner: uid, _id: taskId }, function(err, task) {
     if (err) { return next(err); }
 
     if (!!task) {
@@ -58,8 +58,8 @@ var getTask = function(req, res, next) {
 var deleteTask = function(req, res, next) {
 
   var taskId = req.params.id;
-  var username = req.user.username;
-  Task.findOne({ owner: username, _id: taskId }, function(err, task) {
+  var uid = req.user.uid;
+  Task.findOne({ owner: uid, _id: taskId }, function(err, task) {
     if (err) { return next(err); }
 
     if (!!task) {
@@ -76,7 +76,7 @@ var deleteTask = function(req, res, next) {
  * PUT: /api/task/:id
  */
 var updateTask = function(req, res, next) {
-
+  //TODO - authentication
   var id = req.params.id;
   var updates = req.body;
   Task.findById(id, function(err, task) {
@@ -97,7 +97,7 @@ var updateTask = function(req, res, next) {
  * body <- {value: v}
  */
 var createTaskEvent = function(req, res, next) {
-
+  //TODO - authentication
   var taskId = req.params.taskId;
   var val = req.body.value;
   Task.findById(taskId, function(err, task) {
@@ -115,7 +115,7 @@ var createTaskEvent = function(req, res, next) {
  * GET: /api/task/:taskId/events
  */
 var listTaskEvents = function(req, res, next) {
-
+  //TODO - authentication
   var taskId = req.params.taskId;
   TaskEvent.find({task_id: taskId}, function(err, taskEvents) {
     if (err) {return next(err); }
@@ -131,7 +131,7 @@ var listTaskEvents = function(req, res, next) {
  * body <- {value: v}
  */
 var deleteTaskEvent = function(req, res, next) {
-
+  //TODO - authentication
   var taskId = req.params.taskId;
   var id = req.params.id;
   TaskEvent.findById(id, function(err, te) {

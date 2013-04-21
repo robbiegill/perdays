@@ -1,8 +1,10 @@
 #don't check in app secrets...defaults in config.json.example
 config.json
 
-# SublimeText project files
+# editor project files
+.idea
 *.sublime-workspace
+*.sublime-project
 
 # OSX
 .DS_Store
@@ -17,3 +19,9 @@ Icon
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
+
+# node
+node_modules
+
+# ssl
+*.pem

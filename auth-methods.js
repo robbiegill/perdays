@@ -2,38 +2,17 @@ var passport = require('passport')
   , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
   , GitHubStrategy = require('passport-github').Strategy
   , TwitterStrategy = require('passport-twitter').Strategy
-  , User = require('./models/user').Model
+  , User = require('./models/user')
   , config = require('./config.json');
 
 module.exports = {};
 
 passport.serializeUser(function (user, done) {
-  var createSessionKey = function () {
-    var token = user.createToken();
-    User.findOne({session_key: token}, function(err, existingUser) {
-      if (err) {return done(err);}
-      if (existingUser) {
-        createSessionKey();
-      } else {
-        user.set( 'session_key', token );
-        user.save(function(err){
-          if (err) {return done(err);}
-          return done(null, user.get('session_key'));
-        });
-      }
-    });
-  };
-  if ( user.username ) {
-    createSessionKey();
-  }
-  //done(null, user);
+  User.serializeUser(user, done);
 });
 
 passport.deserializeUser(function (obj, done) {
-  User.findOne({session_key: obj}, function(err, user){
-    if (err) {return done(err);}
-    done(null, user);
-  });
+  User.deserializeUser(obj, done);
 });
 
 passport.use(new GoogleStrategy({
@@ -42,29 +21,7 @@ passport.use(new GoogleStrategy({
     callbackURL: getCallbackURLWithProtocol(config.authGoogle.callbackURL)
   },
   function (token, tokenSecret, profile, done) {
-
-    User.findOne({ 'auth_type_google.uid': profile.id }, function(err, user){
-      if (err) {
-        return done(err);
-      }
-
-      if (user) {
-        console.log('do stuff with user');
-        return done(null, user);
-      } else {
-        var j = profile._json;
-        var gUser = new User();
-        gUser.setGoogleAttr(j);
-        gUser.save(function(err, user){
-          if (err) {return done(err);}
-          return done(null, user);
-        });
-
-      }
-
-
-    });
-
+    User.findOrCreateGoogleUser(token, tokenSecret, profile, done);
   }
 ));
 
@@ -74,23 +31,7 @@ passport.use(new GitHubStrategy({
     callbackURL: getCallbackURLWithProtocol(config.authGitHub.callbackURL)
   },
   function (accessToken, refreshToken, profile, done) {
-
-    User.findOne({ 'auth_type_github.uid': profile.id }, function (err, user) {
-      if (err) {return done(err);}
-
-      if (user) {
-        return done(null, user);
-      } else {
-        var j = profile._json;
-        var githubUser = new User();
-        githubUser.setGitHubAttr(j);
-        githubUser.save(function(err, user) {
-          if (err) {return done(err);}
-          return done(null, user);
-        });
-      }
-
-    });
+    User.findOrCreateGitHubUser(accessToken, refreshToken, profile, done);
   }
 ));
 
@@ -100,23 +41,7 @@ passport.use(new TwitterStrategy({
     callbackURL: getCallbackURLWithProtocol(config.authTwitter.callbackURL)
   },
   function (token, tokenSecret, profile, done) {
-
-    User.findOne({ 'auth_type_twitter.uid': profile.id }, function (err, user) {
-      if (err) {return done(err);}
-
-      if (user) {
-        return done(null, user);
-      } else {
-        var j = profile._json;
-        var twitterUser = new User();
-        twitterUser.setTwitterAttr(j);
-        twitterUser.save(function(err, user) {
-          if (err) {return done(err);}
-          return done(null, user);
-        });
-      }
-
-    });
+    User.findOrCreateTwitterUser(token, tokenSecret, profile, done);
   }
 ));
 
@@ -147,7 +72,6 @@ module.exports.githubCallback = passport.authenticate('github', { failureRedirec
 
 module.exports.twitterAuth = passport.authenticate('twitter');
 module.exports.twitterCallback = passport.authenticate('twitter', { failureRedirect: '/'});
-
 
 
 module.exports.passport = passport;

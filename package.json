@@ -17,10 +17,10 @@
     "passport-google-oauth": "*",
     "passport-twitter": "*",
     "passport-github": ">= 0.1.4",
+    "passport-users": "*",
     "mongoose": "*",
+    "goose-plugins": "*",
     "connect-mongo": "*",
-    "bcrypt": "*",
-    "node-uuid": "*",
     "less": "*"
   },
   "devDependencies": {

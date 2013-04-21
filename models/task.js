@@ -2,8 +2,8 @@ var mongoose = require('mongoose')
   , Schema = mongoose.Schema
   , taskEventSchema = require('./taskEvent').Schema
   , TaskEvent = require('./taskEvent').Model
-  , ts_created = require('./plugins/ts_created')
-  , ts_modified = require('./plugins/ts_modified')
+  , ts_created = require('goose-plugins').ts_created
+  , ts_modified = require('goose-plugins').ts_modified
   , moment = require('moment');
 
 var taskSchema = new Schema({
@@ -44,9 +44,9 @@ taskSchema.methods.addEvent = function(value, cb) {
   });
 };
 
-taskSchema.static('createOne', function(_username, _name, _notes, cb) {
+taskSchema.static('createOne', function(_uid, _name, _notes, cb) {
   var task = new this({
-    owner: _username,
+    owner: _uid,
     name: _name,
     notes: _notes
   }).save(function(err, task){
@@ -54,8 +54,8 @@ taskSchema.static('createOne', function(_username, _name, _notes, cb) {
   });
 });
 
-taskSchema.static('updateStatusThenList', function(_username, cb) {
-  this.find({owner: _username}, function(err, tasks) {
+taskSchema.static('updateStatusThenList', function(_uid, cb) {
+  this.find({owner: _uid}, function(err, tasks) {
     if (err) { return cb(err, tasks); }
     tasks.forEach(function(t) {
       t.updateStatus();
