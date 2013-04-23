@@ -17,7 +17,7 @@
     "passport-google-oauth": "*",
     "passport-twitter": "*",
     "passport-github": ">= 0.1.4",
-    "passport-users": "*",
+    "passport-glue": "*",
     "mongoose": "*",
     "goose-plugins": "*",
     "connect-mongo": "*",
