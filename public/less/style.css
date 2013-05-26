@@ -33,50 +33,50 @@
 .pd-fail {
   box-shadow: #b94a48 1px 2px 5px 1px;
 }
-.cubic-bezier-animation-setup {
+.cubic-bezier-animation {
   -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   -moz-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   -ms-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   -o-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
 }
-.task-enter-setup,
-.task-leave-setup,
-.task-move-setup,
-.view-enter-setup,
-.fade-enter-setup,
-.fade-leave-setup {
+.task-enter,
+.task-leave,
+.task-move,
+.view-enter,
+.fade-enter,
+.fade-leave {
   -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   -moz-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   -ms-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   -o-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
 }
-.fade-enter-setup {
+.fade-enter {
   opacity: 0;
 }
-.fade-enter-start {
+.fade-enter-active {
   opacity: 1;
 }
-.fade-leave-setup {
+.fade-leave {
   opacity: 1;
 }
-.fade-leave-start {
+.fade-leave-active {
   opacity: 0;
 }
-.task-enter-setup {
+.task-enter {
   opacity: 0;
   margin-left: 150px;
 }
-.task-enter-setup.task-enter-start {
+.task-enter.task-enter-active {
   opacity: 1;
   margin-left: 0;
 }
-.task-leave-setup {
+.task-leave {
   opacity: 1;
   margin-left: 0;
 }
-.task-leave-setup.task-leave-start {
+.task-leave.task-leave-active {
   opacity: 0;
   max-height: 0;
   padding-top: 0;

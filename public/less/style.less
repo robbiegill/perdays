@@ -43,7 +43,7 @@
   box-shadow: @fail @shadow-box;
 }
 
-.cubic-bezier-animation-setup {
+.cubic-bezier-animation {
   -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
   -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
   -ms-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
@@ -51,48 +51,48 @@
   transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
 }
 
-.task-enter-setup,
-.task-leave-setup,
-.task-move-setup,
-.view-enter-setup,
-.fade-enter-setup,
-.fade-leave-setup  {
-  .cubic-bezier-animation-setup
+.task-enter,
+.task-leave,
+.task-move,
+.view-enter,
+.fade-enter,
+.fade-leave  {
+  .cubic-bezier-animation
 }
 
-.fade-enter-setup {
+.fade-enter {
   opacity: 0;
 }
-.fade-enter-start {
+.fade-enter-active {
   opacity: 1;
 }
 
-.fade-leave-setup {
+.fade-leave {
   opacity: 1;
 }
-.fade-leave-start {
+.fade-leave-active {
   opacity: 0;
 }
 
-.view-enter-setup {}
-.view-enter-setup.view-enter-start {}
+.view-enter {}
+.view-enter.view-enter-active {}
 
-.task-enter-setup {
+.task-enter {
   opacity: 0;
   margin-left: 150px;
 }
 
-.task-enter-setup.task-enter-start {
+.task-enter.task-enter-active {
   opacity: 1;
   margin-left: 0;
 }
 
-.task-leave-setup {
+.task-leave {
   opacity: 1;
   margin-left: 0;
 }
 
-.task-leave-setup.task-leave-start {
+.task-leave.task-leave-active {
   opacity: 0;
   max-height: 0;
   padding-top: 0;

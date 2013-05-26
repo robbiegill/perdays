@@ -58,7 +58,7 @@ logLevel = LOG_INFO;
 // - Safari (only Mac)
 // - PhantomJS
 // - IE (only Windows)
-browsers = ['ChromeCanary'];
+browsers = ['Chrome'];
 
 
 // If browser does not capture in given timeout [ms], kill it
