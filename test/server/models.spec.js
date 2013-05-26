@@ -138,7 +138,7 @@ describe('models -> ', function() {
       });
 
       it('should update last_event when adding a task event', function(done) {
-        var le = t.last_event = new Date();
+        var le = t.last_event = new Date(Date.now() - 10);
         t.addEvent(10, function(err, te) {
           expect(t.last_event).toBeGreaterThan(le);
           done();
